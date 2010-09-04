@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+from mutagen.flac import FLAC
+import sys
+import os
+
+def main(argv):
+    oldfile=FLAC(sys.argv[1])
+    newfile=FLAC(sys.argv[2])
+
+    comp=flacCompare.flacCompare(oldfile,newfile)
+
+    if comp.equals() :
+        print("Files are equal")
+        sys.exit(0)
+    if not comp.audioEqual() :
+        print("Audio part is not equal.")
+    new=comp.newTags()
+    if new!=[] :
+        new.sort()
+        print("Following tags are new: ", new)
+    removed=comp.removedTags()
+    if removed!=[] :
+        removed.sort()
+        print("Following tags are removed: ", removed)
+    changed=comp.changedTags()
+    if changed!=[] :
+        changed.sort()
+        print("Following tags are changed: ", changed)
+
+if __name__ == "__main__":
+    try: import flacCompare
+    except ImportError:
+        sys.path.append(os.path.abspath("../flac-utils"))
+        import flacCompare
+    main(sys.argv)
