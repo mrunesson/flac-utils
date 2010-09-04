@@ -34,3 +34,25 @@ md5 signatures to tell if the music is the same or not. Thereafter compares it
 the tags/comments on the tracks and tells which differs. I.e you can have to
 files with the same track but with different tags. flac-diff will tell you
 which tags differ between the two files.
+
+
+flac-merge
+----------
+flac-merge [-h] [-v] [-b] FILE FILE [DESTFILE]
+
+Merge tags from two flac files.
+
+positional arguments:
+  FILE           Flac file used as base line.
+  DESTFILE       Destination file.
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose  Verbose output.
+  -b, --both     Save all tags to all files. If destination file given, all
+                 three files will get the same tags.
+
+flac-merge take two flac files and merge the tags. It requires that the md5
+signature of the audio part in the files are equal. Values of the second file
+will override the first file. If destination file not provided, result is
+written to the second file.
