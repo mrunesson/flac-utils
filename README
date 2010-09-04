@@ -1,0 +1,27 @@
+flac-utils is a toolkit for managing flac-files. It iconsists of two
+parts; a python library built on mutagen and a set of tools using the
+library.
+
+Installation
+============
+
+TBD!
+
+For now just go to your checked out copy's tools directory and run the
+tools from there.
+
+
+Tools
+=====
+
+flac-diff
+---------
+flac-diff OLDFILE NEWFILE
+
+flac-diff takes two files as argument and tells if they differs. As a
+difference to normal diff this tool is flac aware. This means it
+compare the two tracks md5 signatures to tell if the music is the
+same. Thereafter compares it the tags/comments on the tracks and tells
+which differs. I.e you can have to files with the same track but with
+different tags. flac-diff will tell you which tags differ between the
+files.
