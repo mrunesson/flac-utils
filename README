@@ -16,12 +16,21 @@ Tools
 
 flac-diff
 ---------
-flac-diff OLDFILE NEWFILE
+flac-diff [-h] [-v] OLDFILE NEWFILE
 
-flac-diff takes two files as argument and tells if they differs. As a
-difference to normal diff this tool is flac aware. This means it
-compare the two tracks md5 signatures to tell if the music is the
-same. Thereafter compares it the tags/comments on the tracks and tells
-which differs. I.e you can have to files with the same track but with
-different tags. flac-diff will tell you which tags differ between the
-files.
+Compares two flac files.
+
+positional arguments:
+  OLDFILE        Flac file used as base line.
+  NEWFILE        Second flac file.
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose  Verbose output.
+
+flac-diff takes two flac files as argument and tells if they differ. Oposite
+to normal diff flac-diff is flac aware. This means it compare the two tracks
+md5 signatures to tell if the music is the same or not. Thereafter compares it
+the tags/comments on the tracks and tells which differs. I.e you can have to
+files with the same track but with different tags. flac-diff will tell you
+which tags differ between the two files.

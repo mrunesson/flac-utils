@@ -4,30 +4,56 @@ from __future__ import print_function
 from mutagen.flac import FLAC
 import sys
 import os
+import argparse
 
 def main(argv):
-    oldfile=FLAC(sys.argv[1])
-    newfile=FLAC(sys.argv[2])
+    parser = argparse.ArgumentParser(
+        description='Compares two flac files.',
+        epilog="""flac-diff takes two flac files as argument and tells if they
+        differ. Oposite to normal diff flac-diff is flac aware. This
+        means it compare the two tracks md5 signatures to tell if the
+        music is the same or not. Thereafter compares it the
+        tags/comments on the tracks and tells which differs. I.e you
+        can have to files with the same track but with different
+        tags. flac-diff will tell you which tags differ between the
+        two files.""")
+    parser.add_argument('OLDFILE', help='Flac file used as base line.')
+    parser.add_argument('NEWFILE', help='Second flac file.')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output.')
+    
+    args = parser.parse_args(argv[1:])
+    
+    oldfile=FLAC(args.OLDFILE)
+    newfile=FLAC(args.NEWFILE)
 
     comp=flacCompare.flacCompare(oldfile,newfile)
 
     if comp.equals() :
-        print("Files are equal")
+        if args.verbose:
+            print("Files are equal")
         sys.exit(0)
     if not comp.audioEqual() :
         print("Audio part is not equal.")
+    elif args.verbose:
+        print("Audio part is equal.")
     new=comp.newTags()
-    if new!=[] :
+    if new!=[]:
         new.sort()
         print("Following tags are new: ", new)
+    elif args.verbose:
+        print("No new tags.")
     removed=comp.removedTags()
-    if removed!=[] :
+    if removed!=[]:
         removed.sort()
         print("Following tags are removed: ", removed)
+    elif args.verbose:
+        print("No tags removed.")
     changed=comp.changedTags()
-    if changed!=[] :
+    if changed!=[]:
         changed.sort()
         print("Following tags are changed: ", changed)
+    elif args.verbose:
+        print("No tags has changed values.")        
 
 if __name__ == "__main__":
     try: import flacCompare
