@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+from mutagen.flac import FLAC
+import sys
+import os
+import argparse
+
+def isRemote(dir):
+    """Check if dir is a remote directory."""
+    if (dir.find(":") != -1):
+        return True
+    else:
+        return False
+
+def main(argv):
+    parser = argparse.ArgumentParser(
+        description='Sync file tree of flacs comments for files with the same audio-part.',
+        epilog="""flac-sync take two directories and sync the those directory
+        trees flac files comment. File with different audio part are not
+        handled. If a files only exist in one of the trees the file is ignored.
+        The directories can be a remote directory accessed using ssh and 
+        flac-sync-server. Remote directory is given as host:dir or 
+        user@host:dir. One of the directories must be local.""")
+    parser.add_argument('SRCDIR', help='Flac file used as base line.')
+    parser.add_argument('DESTDIR', help='Second flac file.')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output.')
+    parser.add_argument('-a', '--audio', action='store_true', help='Tell when audio part differs.')
+    parser.add_argument('-m', '--missing', action='store_true', help='Tell when file is missing in one of the trees. + marks missing in DESTDIR and - marks missing on SRCDIR')
+    parser.add_argument('-s', '--sync-server', help='Path to flac-sync-server on remote server(s).')
+    
+    args = parser.parse_args(argv[1:])
+
+    if (isRemote(args.SRCDIR) and isRemote(args.DESTDIR)):
+        print("ERROR: Both source and destenation dir cannot be remote.")
+
+
+    for root, dirs, files in os.walk(args.SRCDIR):
+    	destroot=args.DESTDIR+root[len(args.SRCDIR):]
+	for name in files:
+	    print()
+            print(os.path.join(root, name) + " + " + os.path.join(destroot, name))
+	    srcFlac=FLAC(os.path.join(root, name))
+            dstFlac=FLAC(os.path.join(destroot, name))
+            comp=flacCompare.flacCompare(srcFlac,dstFlac)
+	    if comp.equals() :
+	        print("Files are equal")
+		break
+            if not comp.audioEqual() :
+                print("Audio part is not equal.")
+            else:
+                print("Audio part is equal.")
+            new=comp.newTags()
+            if new!=[]:
+                new.sort()
+                print("Following tags are new: ", new)
+            else: 
+                print("No new tags.")
+            removed=comp.removedTags()
+            if removed!=[]:
+               removed.sort()
+               print("Following tags are removed: ", removed)
+            else:
+               print("No tags removed.")
+            changed=comp.changedTags()
+            if changed!=[]:
+               changed.sort()
+               print("Following tags are changed: ", changed)
+       
+    
+
+
+
+if __name__ == "__main__":
+    try: import flacCompare
+    except ImportError:
+        sys.path.append(os.path.abspath("../flac-utils"))
+        import flacCompare
+    main(sys.argv)
