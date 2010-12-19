@@ -18,25 +18,45 @@ class metadataFlac:
     have the metadata and does not have to be complete."""
 
     info=None
-    comments={}
+    tags={}
     
 
     def readFile(file):
+        """Not ready!!!"""
         f = open(file, "r")
         for line in f:
             l=line.split(u':',1)
             field=l[0]
             value=l[1]
-            
+        f.close()
+        
+    def writeFile(file):
+        """Not ready!!!"""
+        f = open(file, "w")
+        f.close()
+
         
     def __init__(self, file=None, tags={}, info=None):
         if file is not None:
             readFile(file)
         else
+            if not isinstance(tags, dict):
+                raise Exception
             self.tags=tags
-            if info is None:
-                self.info=metadataFlacInfo()
+            self.info=info
+
+    def addTag(tag, value):
+        if isinstance(value, list):
+            if tag in tags:
+                tags[tag]+=value
             else:
-                self.info=info
-                
-          
+                tags[tag]=value
+        else:
+            if tag in tags:
+                tags[tag]+=[value]
+            else:
+                tags[tag]=[value]
+
+    def delTag(tag):
+        if tag in tags:
+            del tags[tag]
