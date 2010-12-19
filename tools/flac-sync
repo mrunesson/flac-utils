@@ -19,15 +19,15 @@ def main(argv):
         epilog="""flac-sync take two directories and sync the those directory
         trees flac files comment. File with different audio part are not
         handled. If a files only exist in one of the trees the file is ignored.
-        The directories can be a remote directory accessed using ssh and 
-        flac-sync-server. Remote directory is given as host:dir or 
-        user@host:dir. One of the directories must be local.""")
+        """)
     parser.add_argument('SRCDIR', help='Flac file used as base line.')
     parser.add_argument('DESTDIR', help='Second flac file.')
     parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output.')
     parser.add_argument('-a', '--audio', action='store_true', help='Tell when audio part differs.')
-    parser.add_argument('-m', '--missing', action='store_true', help='Tell when file is missing in one of the trees. + marks missing in DESTDIR and - marks missing on SRCDIR')
-    parser.add_argument('-s', '--sync-server', help='Path to flac-sync-server on remote server(s).')
+    parser.add_argument('-c', '--copy', action='store_true', help='Copy missing files from source to dest.')
+    parser.add_argument('-d', '--dry', action='store_true', help='Dry run. Only tells what differs.')
+    parser.add_argument('-b', '--both', action='store_true', help='Save all tags to both files.')
+    parser.add_argument('-o', '--overwrite', action='store_true', help='If a tags differ between src and dest. src value is copied to dest. NOT IMPLEMENTED!')
     
     args = parser.parse_args(argv[1:])
 
@@ -38,34 +38,47 @@ def main(argv):
     for root, dirs, files in os.walk(args.SRCDIR):
     	destroot=args.DESTDIR+root[len(args.SRCDIR):]
 	for name in files:
-	    print()
-            print(os.path.join(root, name) + " + " + os.path.join(destroot, name))
 	    srcFlac=FLAC(os.path.join(root, name))
             dstFlac=FLAC(os.path.join(destroot, name))
             comp=flacCompare.flacCompare(srcFlac,dstFlac)
-	    if comp.equals() :
-	        print("Files are equal")
-		break
-            if not comp.audioEqual() :
-                print("Audio part is not equal.")
-            else:
-                print("Audio part is equal.")
-            new=comp.newTags()
-            if new!=[]:
-                new.sort()
-                print("Following tags are new: ", new)
-            else: 
-                print("No new tags.")
-            removed=comp.removedTags()
-            if removed!=[]:
-               removed.sort()
-               print("Following tags are removed: ", removed)
-            else:
-               print("No tags removed.")
-            changed=comp.changedTags()
-            if changed!=[]:
-               changed.sort()
-               print("Following tags are changed: ", changed)
+	    if args.dry or args.verbose:
+  	        print()
+                print(os.path.join(root, name) + " compared with " 
+                    + os.path.join(destroot, name))
+  	        if comp.equals() :
+	    	    print("Files are equal")
+		    break
+                if not comp.audioEqual() :
+                    print("Audio part is not equal.")
+                else:
+                    print("Audio part is equal.")
+                new=comp.newTags()
+                if new!=[]:
+                    new.sort()
+                    print("Following tags exist only at destination: ", new)
+                else: 
+                    print("No new tags.")
+                removed=comp.removedTags()
+                if removed!=[]:
+                    removed.sort()
+                    print("Following tags exist only at source: ", removed)
+                else:
+                    print("No tags removed.")
+                changed=comp.changedTags()
+                if changed!=[]:
+                    changed.sort()
+                    print("Following tags are changed: ", changed)
+	    if args.dry:
+		if comp.audioEqual(): 
+  	            comp.merge()
+                    dstFlac.save()
+		    if args.both:
+		        #Save also on src destination.
+   		        dstFlac.save(os.path.join(root, name))
+                else:
+                    print(os.path.join(root, name) + " and " 
+                        + os.path.join(destroot, name)
+		        + "has not equal audio part, skipping.")
        
     
 
