@@ -38,50 +38,89 @@ def main(argv):
     for root, dirs, files in os.walk(args.SRCDIR):
     	destroot=args.DESTDIR+root[len(args.SRCDIR):]
 	for name in files:
-	    srcFlac=FLAC(os.path.join(root, name))
-            dstFlac=FLAC(os.path.join(destroot, name))
-            comp=flacCompare.flacCompare(srcFlac,dstFlac)
-	    if args.dry or args.verbose:
-  	        print()
-                print(os.path.join(root, name) + " compared with " 
-                    + os.path.join(destroot, name))
-  	        if comp.equals() :
-	    	    print("Files are equal")
-		    break
-                if not comp.audioEqual() :
-                    print("Audio part is not equal.")
-                else:
-                    print("Audio part is equal.")
-                new=comp.newTags()
-                if new!=[]:
-                    new.sort()
-                    print("Following tags exist only at destination: ", new)
-                else: 
-                    print("No new tags.")
-                removed=comp.removedTags()
-                if removed!=[]:
-                    removed.sort()
-                    print("Following tags exist only at source: ", removed)
-                else:
-                    print("No tags removed.")
-                changed=comp.changedTags()
-                if changed!=[]:
-                    changed.sort()
-                    print("Following tags are changed: ", changed)
-	    if args.dry:
-		if comp.audioEqual(): 
-  	            comp.merge()
-                    dstFlac.save()
-		    if args.both:
-		        #Save also on src destination.
-   		        dstFlac.save(os.path.join(root, name))
-                else:
-                    print(os.path.join(root, name) + " and " 
-                        + os.path.join(destroot, name)
-		        + "has not equal audio part, skipping.")
-       
-    
+	    srcFile=os.path.join(root, name)
+	    dstFile=os.path.join(destroot, name)
+	    if not os.path.isfile(dstFile):
+	        if args.verbose:
+		   print("File " + dstFile + " missing.")
+		if args.copy:
+		    if not args.dry:
+		        shutils.makedirs(os.path.dirname(dstFile))
+                        shutil.copyfile(srcFile, dstFile)
+		    else:
+		        print("cp " + srcFile + " " + dstFile)
+		break
 
+	    srcFlac=FLAC(srcFile)
+            dstFlac=FLAC(dstFile)
+            comp=flacCompare.flacCompare(srcFlac,dstFlac)
+ 	    if comp.equals():
+                # If files equal do not do anything.
+	        if args.verbose:
+		    print(srcFile + " and " + dstFile + " are equal.")
+	        break
+
+            if not comp.audioEqual():
+	       	if args.copy:
+		    if not args.time or os.path.getmtime(srcFile) > os.path.getmtime(dstFile):
+                        if not args.dry:
+                            shutil.copyfile(srcFile, dstFile)
+  		        else:
+		            print("cp " + srcFile + " " + dstFile)
+		    elif args.both and args.time and os.path.getmtime(srcFile) < os.path.getmtime(dstFile):
+                        if not args.dry:
+                            shutil.copyfile(dstFile, srcFile)
+  		        else:
+		            print("cp " + dstFile + " " + srcFile)
+
+		break
+            elif args.verbose:
+                print(srcFile + " and " + dstFile + " audio are equal.")
+
+            new=comp.newTags()
+            if new!=[]:
+                new.sort()
+	        if args.verbose:
+                    print("Following tags exist only at " + dstFile + ": ", new)
+                if args.dry:
+                    print("Following tags copied from " + srcFile + " to " + dstFile + ": ", new)
+		else:
+		    comp.merge()
+            
+
+            removed=comp.removedTags()
+            if removed!=[]:
+                removed.sort()
+	        if args.verbose:
+                    print("Following tags exist only at " + srcFile + ": ", removed)
+                if args.both:
+                    if args.dry:
+                        print("Following tags copied from " + dstFile + " to " + srcFile + ": ", removed)
+	  	    else:
+		        comp.mergeReverse()
+
+
+            changed=comp.changedTags()
+            if changed!=[]:
+                changed.sort()
+   	        if args.time and os.path.getmtime(srcFile) > os.path.getmtime(dstFile):
+		    if args.dry or args.verbose:
+                        print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
+		    else:
+  		        # Copy changed to dst.
+			pass
+                elif args.overwrite:
+		    if args.dry or args.verbose:
+                        print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
+		    else:
+  		        # Copy changed to dst.
+			pass
+                elif args.time and args.both and os.path.getmtime(srcFile) < os.path.getmtime(dstFile):
+                    if args.dry or args.verbose:
+                        print("Following tags overwrites from " + dstFile + " to " + srcFile + ": ", changed)
+		    else:
+  		        # Copy changed to src.
+			pass
 
 
 if __name__ == "__main__":

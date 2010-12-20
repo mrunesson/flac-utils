@@ -58,6 +58,15 @@ class flacCompare:
             if k not in self.newflac:
                 self.newflac[k]=self.oldflac[k]
 
+    def mergeReverse(self):
+        """Merge missing tags in newflac into oldflac."""
+        if not self.audioEqual():
+            raise Exception
+        for k in self.newflac.keys():
+            if k not in self.oldflac:
+                self.oldflac[k]=self.newflac[k]
+
+
     def equals(self):
         """Compare the two flacs."""
         if not self.audioEqual():
