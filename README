@@ -2,6 +2,8 @@ flac-utils is a toolkit for managing flac-files. It iconsists of two
 parts; a python library built on mutagen and a set of tools using the
 library.
 
+See http://www.linuxalert.org/devcenter/trac/flac-utils for details.
+
 Installation
 ============
 

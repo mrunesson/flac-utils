@@ -13,13 +13,9 @@ class metadataFlacInfo:
     
 
 
-class metadataFlac:
+class metadataFlac(dict):
     """Class to fake a mutagen.flac.FLAC object. This class does only
     have the metadata and does not have to be complete."""
-
-    info=None
-    tags={}
-    
 
     def readFile(file):
         """Not ready!!!"""
@@ -39,24 +35,10 @@ class metadataFlac:
     def __init__(self, file=None, tags={}, info=None):
         if file is not None:
             readFile(file)
-        else
+        else:
             if not isinstance(tags, dict):
                 raise Exception
-            self.tags=tags
+            self=tags
             self.info=info
 
-    def addTag(tag, value):
-        if isinstance(value, list):
-            if tag in tags:
-                tags[tag]+=value
-            else:
-                tags[tag]=value
-        else:
-            if tag in tags:
-                tags[tag]+=[value]
-            else:
-                tags[tag]=[value]
 
-    def delTag(tag):
-        if tag in tags:
-            del tags[tag]

@@ -5,13 +5,7 @@ from mutagen.flac import FLAC
 import sys
 import os
 import argparse
-
-def isRemote(dir):
-    """Check if dir is a remote directory."""
-    if (dir.find(":") != -1):
-        return True
-    else:
-        return False
+import shutil
 
 def main(argv):
     parser = argparse.ArgumentParser(
@@ -28,29 +22,33 @@ def main(argv):
     parser.add_argument('-c', '--copy', action='store_true', help='Copy missing files from source to dest.')
     parser.add_argument('-d', '--dry', action='store_true', help='Dry run. Only tells what differs.')
     parser.add_argument('-t', '--time', action='store_true', help='take notice of time stamps.')
-    parser.add_argument('-o', '--overwrite', action='store_true', help='If a tags differ between src and dest. src value is copied to dest. NOT IMPLEMENTED!')
+    parser.add_argument('-o', '--overwrite', action='store_true', help='If a tags differ between src and dest. src value is copied to dest.')
     
     args = parser.parse_args(argv[1:])
 
-    if (isRemote(args.SRCDIR) and isRemote(args.DESTDIR)):
-        print("ERROR: Both source and destenation dir cannot be remote.")
-
+    if args.time and args.overwrite:
+        print("Argument error: time and overwrite cammot be combined.")
+        sys.exit(3)
 
     for root, dirs, files in os.walk(args.SRCDIR):
+        if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
+            continue
     	destroot=args.DESTDIR+root[len(args.SRCDIR):]
 	for name in files:
 	    srcFile=os.path.join(root, name)
 	    dstFile=os.path.join(destroot, name)
+            if args.verbose:
+	        print("Working with src: " + srcFile + "    dst: " + dstFile)
 	    if not os.path.isfile(dstFile):
 	        if args.verbose:
 		   print("File " + dstFile + " missing.")
 		if args.copy:
 		    if not args.dry:
-		        shutils.makedirs(os.path.dirname(dstFile))
+		        os.makedirs(os.path.dirname(dstFile))
                         shutil.copyfile(srcFile, dstFile)
 		    else:
 		        print("cp " + srcFile + " " + dstFile)
-		break
+                continue
 
 	    srcFlac=FLAC(srcFile)
             dstFlac=FLAC(dstFile)
@@ -59,7 +57,7 @@ def main(argv):
                 # If files equal do not do anything.
 	        if args.verbose:
 		    print(srcFile + " and " + dstFile + " are equal.")
-	        break
+	        continue
 
             if not comp.audioEqual():
 	       	if args.copy:
@@ -73,8 +71,9 @@ def main(argv):
                             shutil.copyfile(dstFile, srcFile)
   		        else:
 		            print("cp " + dstFile + " " + srcFile)
-
-		break
+                else:
+                    print(srcFile + " and " + dstFile + " are not audio equal, ignored.")
+		continue
             elif args.verbose:
                 print(srcFile + " and " + dstFile + " audio are equal.")
 
@@ -83,10 +82,11 @@ def main(argv):
                 new.sort()
 	        if args.verbose:
                     print("Following tags exist only at " + dstFile + ": ", new)
-                if args.dry:
-                    print("Following tags copied from " + srcFile + " to " + dstFile + ": ", new)
-		else:
-		    comp.merge()
+                if args.both:
+                    if args.dry:
+                        print("Following tags copied from " + dstFile + " to " + srcFile + ": ", removed)
+	  	    else:
+		        comp.mergeReverse()
             
 
             removed=comp.removedTags()
@@ -94,35 +94,47 @@ def main(argv):
                 removed.sort()
 	        if args.verbose:
                     print("Following tags exist only at " + srcFile + ": ", removed)
-                if args.both:
-                    if args.dry:
-                        print("Following tags copied from " + dstFile + " to " + srcFile + ": ", removed)
-	  	    else:
-		        comp.mergeReverse()
+                if args.dry:
+                    print("Following tags copied from " + srcFile + " to " + dstFile + ": ", new)
+		else:
+		    comp.merge()
 
 
             changed=comp.changedTags()
             if changed!=[]:
                 changed.sort()
    	        if args.time and os.path.getmtime(srcFile) > os.path.getmtime(dstFile):
-		    if args.dry or args.verbose:
+                    if args.dry:
                         print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
 		    else:
+                        if args.verbose:
+                            print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
   		        # Copy changed to dst.
-			pass
+                        for changedTag in changed:
+                            dstFlac[changedTag]=srcFlac[changedTag]
                 elif args.overwrite:
-		    if args.dry or args.verbose:
+                    if args.dry:
                         print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
 		    else:
+                        if args.verbose:
+                            print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
   		        # Copy changed to dst.
-			pass
+                        for changedTag in changed:
+                            dstFlac[changedTag]=srcFlac[changedTag]
                 elif args.time and args.both and os.path.getmtime(srcFile) < os.path.getmtime(dstFile):
-                    if args.dry or args.verbose:
+                    if args.dry:
                         print("Following tags overwrites from " + dstFile + " to " + srcFile + ": ", changed)
 		    else:
+                        if args.verbose:
+                            print("Following tags overwrites from " + dstFile + " to " + srcFile + ": ", changed)
   		        # Copy changed to src.
-			pass
-
+                        for changedTag in changed:
+                            srcFlac[changedTag]=dstFlac[changedTag]
+            if not args.dry:
+                dstFlac.save()
+                if args.both:
+                    srcFlac.save()
+            
 
 if __name__ == "__main__":
     try: import flacCompare

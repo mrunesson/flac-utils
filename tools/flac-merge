@@ -36,7 +36,7 @@ def main(argv):
         sys.exit(1)
 
     if args.verbose:
-        print("Following tags are added: ", comp.removedTags())
+        print("Following tags are added to destination: ", comp.removedTags())
 
     comp.merge()
     if args.verbose:
