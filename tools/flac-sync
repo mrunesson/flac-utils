@@ -50,8 +50,17 @@ def main(argv):
 		        print("cp " + srcFile + " " + dstFile)
                 continue
 
-	    srcFlac=FLAC(srcFile)
-            dstFlac=FLAC(dstFile)
+            try:
+                srcFlac=FLAC(srcFile)
+            except:
+                print("ERROR: Cannot handle source file %s, skipping."%srcFile)
+                continue
+            try:
+                dstFlac=FLAC(dstFile)
+            except:
+                print("ERROR: Cannot handle destination file %s, skipping."%dstFile)
+                continue
+
             comp=flacCompare.flacCompare(srcFlac,dstFlac)
  	    if comp.equals():
                 # If files equal do not do anything.
