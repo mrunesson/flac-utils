@@ -93,7 +93,7 @@ def main(argv):
                     print("Following tags exist only at " + dstFile + ": ", new)
                 if args.both:
                     if args.dry:
-                        print("Following tags copied from " + dstFile + " to " + srcFile + ": ", removed)
+                        print("Following tags copied from " + dstFile + " to " + srcFile + ": ", new)
 	  	    else:
 		        comp.mergeReverse()
             
@@ -104,7 +104,7 @@ def main(argv):
 	        if args.verbose:
                     print("Following tags exist only at " + srcFile + ": ", removed)
                 if args.dry:
-                    print("Following tags copied from " + srcFile + " to " + dstFile + ": ", new)
+                    print("Following tags copied from " + srcFile + " to " + dstFile + ": ", removed)
 		else:
 		    comp.merge()
 
