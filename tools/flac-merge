@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 from mutagen.flac import FLAC
+from flac_compare import flac_compare
 import sys
 import os
 import argparse
@@ -30,13 +31,13 @@ def main(argv):
         secondfile=FLAC(args.DESTFILE)
     
 
-    comp=flacCompare.flacCompare(firstfile,secondfile)
-    if not comp.audioEqual() :
+    comp=flac_compare.FlacCompare(firstfile,secondfile)
+    if not comp.audio_equal() :
         print("Audio part is not equal. Cannot merge.", file=sys.stderr)
         sys.exit(1)
 
     if args.verbose:
-        print("Following tags are added to destination: ", comp.removedTags())
+        print("Following tags are added to destination: ", comp.removed_tags())
 
     comp.merge()
     if args.verbose:
@@ -53,8 +54,4 @@ def main(argv):
             secondfile.save(args.FILE[1])
     
 if __name__ == "__main__":
-    try: import flacCompare
-    except ImportError:
-        sys.path.append(os.path.abspath("../flac-utils"))
-        import flacCompare
     main(sys.argv)

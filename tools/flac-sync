@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 from mutagen.flac import FLAC
+from flac_compare import flac_compare
 import sys
 import os
 import argparse
@@ -61,14 +62,14 @@ def main(argv):
                 print("ERROR: Cannot handle destination file %s, skipping."%dstFile)
                 continue
 
-            comp=flacCompare.flacCompare(srcFlac,dstFlac)
+            comp=flac_compare.FlacCompare(srcFlac,dstFlac)
  	    if comp.equals():
                 # If files equal do not do anything.
 	        if args.verbose:
 		    print(srcFile + " and " + dstFile + " are equal.")
 	        continue
 
-            if not comp.audioEqual():
+            if not comp.audio_equal():
 	       	if args.copy:
 		    if not args.time or os.path.getmtime(srcFile) > os.path.getmtime(dstFile):
                         if not args.dry:
@@ -86,7 +87,7 @@ def main(argv):
             elif args.verbose:
                 print(srcFile + " and " + dstFile + " audio are equal.")
 
-            new=comp.newTags()
+            new=comp.new_tags()
             if new!=[]:
                 new.sort()
 	        if args.verbose:
@@ -95,10 +96,10 @@ def main(argv):
                     if args.dry:
                         print("Following tags copied from " + dstFile + " to " + srcFile + ": ", new)
 	  	    else:
-		        comp.mergeReverse()
+		        comp.merge_reverse()
             
 
-            removed=comp.removedTags()
+            removed=comp.removed_tags()
             if removed!=[]:
                 removed.sort()
 	        if args.verbose:
@@ -109,7 +110,7 @@ def main(argv):
 		    comp.merge()
 
 
-            changed=comp.changedTags()
+            changed=comp.changed_tags()
             if changed!=[]:
                 changed.sort()
    	        if args.time and os.path.getmtime(srcFile) > os.path.getmtime(dstFile):
@@ -146,8 +147,4 @@ def main(argv):
             
 
 if __name__ == "__main__":
-    try: import flacCompare
-    except ImportError:
-        sys.path.append(os.path.abspath("../flac-utils"))
-        import flacCompare
     main(sys.argv)

@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 from mutagen.flac import FLAC
+from flac_compare import flac_compare
 import sys
 import os
 import argparse
@@ -33,29 +34,29 @@ def main(argv):
     oldfile=FLAC(args.OLDFILE)
     newfile=FLAC(args.NEWFILE)
 
-    comp=flacCompare.flacCompare(oldfile,newfile)
+    comp=flac_compare.FlacCompare(oldfile,newfile)
 
     if comp.equals() :
         if args.verbose:
             print("Files are equal")
         sys.exit(0)
-    if not comp.audioEqual() :
+    if not comp.audio_equal() :
         print("Audio part is not equal.")
     elif args.verbose:
         print("Audio part is equal.")
-    new=comp.newTags()
+    new=comp.new_tags()
     if new!=[]:
         new.sort()
         print("Following tags are new: ", new)
     elif args.verbose:
         print("No new tags.")
-    removed=comp.removedTags()
+    removed=comp.removed_tags()
     if removed!=[]:
         removed.sort()
         print("Following tags are removed: ", removed)
     elif args.verbose:
         print("No tags removed.")
-    changed=comp.changedTags()
+    changed=comp.changed_tags()
     if changed!=[]:
         changed.sort()
         print("Following tags are changed: ", changed)
@@ -65,8 +66,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    try: import flacCompare
-    except ImportError:
-        sys.path.append(os.path.abspath("../flac-utils"))
-        import flacCompare
     main(sys.argv)
