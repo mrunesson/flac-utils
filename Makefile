@@ -1,10 +1,15 @@
+DESTDIR=/
+
+all:
+
 install:
-	install -o root tools/flac-diff /usr/bin/
-	install -o root tools/flac-merge /usr/bin
-	install -o root tools/flac-sync /usr/bin
-	install -o root README /usr/share/doc/flac-utils/
-	install -o root COPYING /usr/share/doc/flac-utils/
+	install -d $(DESTDIR)/usr/bin $(DESTDIR)/usr/share/doc/flac-utils/
+	install tools/flac-diff $(DESTDIR)/usr/bin
+	install tools/flac-merge $(DESTDIR)/usr/bin
+	install tools/flac-sync $(DESTDIR)/usr/bin
+	install README $(DESTDIR)/usr/share/doc/flac-utils/
+	install COPYING $(DESTDIR)/usr/share/doc/flac-utils/
 
 clean:
 
-.PHONY clean install
+.PHONY: clean install
