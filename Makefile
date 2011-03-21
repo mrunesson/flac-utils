@@ -8,7 +8,6 @@ install:
 	install tools/flac-merge $(DESTDIR)/usr/bin
 	install tools/flac-sync $(DESTDIR)/usr/bin
 	install README $(DESTDIR)/usr/share/doc/flac-utils/
-	install COPYING $(DESTDIR)/usr/share/doc/flac-utils/
 
 clean:
 

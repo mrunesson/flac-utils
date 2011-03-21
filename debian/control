@@ -10,8 +10,9 @@ Homepage: http://www.linuxalert.org/project/flac-utils/
 
 Package: flac-utils
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-flaccompare
-Description:flac-utils is a toolkit for managing flac-files
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-flaccompare, ${python:Depends}
+XB-Python-Version: ${python:Versions}
+Description: Toolkit for managing flac-files
  Flac-utils includ tools to compare flac files on metadata. It can also
  sync and merge flacfiles. The sync works a bit like rsync but works on the 
  metadata.
