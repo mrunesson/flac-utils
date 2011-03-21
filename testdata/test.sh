@@ -4,6 +4,9 @@
 prepare() {
     cp -Ra src test-src
     cp -Ra dst test-dst
+    touch test-dst/tag-differ-dst-newer.flac
+    touch test-src/tag-differ-src-newer.flac
+    touch test-dst/file1.flac
 }
 
 
@@ -20,6 +23,7 @@ result() {
     for testfile in `find test-src -type f ! -path "*/.svn/*"`
     do
         expectfile=`echo $testfile | sed "s/test-src/expected-result\/$1-src/"`
+	echo $testfile
         ../tools/flac-diff $testfile $expectfile
         if [ $? -ne 0 ] ; then
             testOK=false
@@ -35,6 +39,7 @@ result() {
     for testfile in `find test-dst -type f ! -path "*/.svn/*"`
     do
         expectfile=`echo $testfile | sed "s/test-dst/expected-result\/$1-dst/"`
+	echo $testfile
         ../tools/flac-diff $testfile $expectfile
         if [ $? -ne 0 ] ; then
             testOK=false
