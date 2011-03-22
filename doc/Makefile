@@ -8,6 +8,7 @@ XP     = xsltproc --nonet --param man.charmap.use.subset "0"
 .xml.1:
 	$(XP) $(DB2MAN) $<
 
+.PHONY: clean
 
 all: ${MAN_PAGES}
 

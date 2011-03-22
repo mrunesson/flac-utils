@@ -9,7 +9,7 @@ install: all
 	install tools/flac-sync $(DESTDIR)/usr/bin
 	install README $(DESTDIR)/usr/share/doc/flac-utils/
 	install flac-sync-algorithm.txt $(DESTDIR)/usr/share/doc/flac-utils/
-	install doc/*.1 $DESTDIR/share/man/man1
+	install doc/*.1 $(DESTDIR)/share/man/man1
 
 doc:
 	cd doc ; ${MAKE} all
