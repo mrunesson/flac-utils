@@ -45,7 +45,8 @@ def main(argv):
 		   print("File " + dstFile + " missing.")
 		if args.copy:
 		    if not args.dry:
-		        os.makedirs(os.path.dirname(dstFile))
+                        if not os.access(os.path.dirname(dstFile), os.W_OK):
+                            os.makedirs(os.path.dirname(dstFile))
                         shutil.copyfile(srcFile, dstFile)
 		    else:
 		        print("cp " + srcFile + " " + dstFile)
