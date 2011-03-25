@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY dhfirstname "Magnus">
+  <!ENTITY dhsurname   "Runesson">
+  <!ENTITY dhusername  "&dhfirstname; &dhsurname;">
+  <!ENTITY dhemail     "magru@linuxalert.org">
+  <!ENTITY dhsection   "1">
+  <!ENTITY dhtitle     "flac-diff User Manual">
+  <!ENTITY dhucpackage "flac-diff">
+  <!ENTITY dhpackage   "flac-diff">
+]>
+
+<refentry>
+  <refentryinfo>
+    <title>&dhtitle;</title>
+    <productname>&dhpackage;</productname>
+    <authorgroup>
+      <author>
+       <firstname>&dhfirstname;</firstname>
+        <surname>&dhsurname;</surname>
+        <contrib>Wrote this manpage.</contrib>
+        <address>
+          <email>&dhemail;</email>
+        </address>
+      </author>
+    </authorgroup>
+    <copyright>
+      <year>2011</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    <legalnotice>
+      <para>This manual page was written for the Ubuntu system
+        (and may be used by others).</para>
+      <para>Permission is granted to copy, distribute and/or modify this
+        document under the terms of the GNU General Public License,
+        Version 2 or (at your option) any later version published by
+        the Free Software Foundation.</para>
+      <para>On Ubuntu systems, the complete text of the GNU General Public
+        License can be found in
+        <filename>/usr/share/common-licenses/GPL</filename>.</para>
+    </legalnotice>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>&dhucpackage;</refentrytitle>
+    <manvolnum>&dhsection;</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+    <refpurpose>Compare and tells the difference between two flac files.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+      <arg choice="opt">
+        <option>-v</option>
+      </arg>
+      <arg choice="opt">
+        <option>-a</option>
+      </arg>
+      <arg choice="plain">
+          <replaceable>FILE1</replaceable>
+      </arg>
+      <arg choice="plain">
+          <replaceable>FILE2</replaceable>
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="description">
+    <title>DESCRIPTION</title>
+    <para>
+    The command <command>flac-diff</command> takes two flac files as argument
+    and tells if they differ. Oposite to normal diff 
+    <command>flac-diff</command> is flac aware. This means it compare the two
+    tracks md5 signatures to tell if the music is the same or not. Thereafter
+    it compares the tags/comments on the tracks and tells which differs. 
+    I.E. you can have to files with the same track but with different tags. 
+    <command>flac-diff</command> will tell you which tags differ between the
+    two files.
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>OPTIONS</title>
+    <para>The program follows the usual GNU command line syntax,
+      with long options starting with two dashes (`-').  A summary of
+      options is included below.</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>-h</option>
+        </term>
+        <term>
+          <option>--help</option>
+        </term>
+        <listitem>
+          <para>Show summary of options.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-v</option>
+        </term>
+        <term>
+          <option>--verbose</option>
+        </term>
+        <listitem>
+          <para>Increase output verbosity.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="bugs">
+    <title>BUGS</title> <para>When doing bidirectional syncronization
+    (<option>-b</option>) files only existing in destination tree are
+    ignored.</para>
+  </refsect1>
+  <refsect1 id="see_also">
+    <title>SEE ALSO</title> 
+        <para><citerefentry>
+        <refentrytitle>flac-merge</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry>, <citerefentry>
+        <refentrytitle>flac-sync</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry></para>
+  </refsect1>
+</refentry>
+

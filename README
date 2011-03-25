@@ -1,165 +1,25 @@
 flac-utils is a toolkit for managing flac-files. Primary usage is syncing
 metadata between flac file sets. 
 
+The utilitiy consist of three tools:
+ * flac-sync  - Sync file tree of flacs comments for files with the same
+   	        audio-part.
+ * flac-diff  - Compare two flac files metadata information and tell the 
+                differences.
+ * flac-merge - Merge metadata from two flac-files.
+
 See http://www.linuxalert.org/devcenter/trac/flac-utils for details.
 
 Installation
 ============
 
-Requires that you have installed the Python module flac_compare to work.
-flac_compare can be found at: https://github.com/mrunesson/flac_compare or packaged for Ubuntu (Debian) at https://launchpad.net/~m-runesson/+archive/unstable
-
+Requires that you have installed the Python module flac_compare to
+work.  flac_compare can be found at:
+https://github.com/mrunesson/flac_compare or packaged for Ubuntu
+(Debian) at https://launchpad.net/~m-runesson/+archive/unstable
 
 For now just go to your checked out copy's tools directory and run the
 tools from there.
-
-Tools
-=====
-
-sync-flac
-=========
-Sync file tree of flacs comments for files with the same audio-part.
-
-Usage: flac-sync [-h] [-v] [-a] [-b] [-c] [-d] [-i] [-t] [-o] SRCDIR DESTDIR
-
-Command line arguments
-----------------------
-Arguments that only change verbosity in output:
--v, --verbose    Verbose output
--a, --audio      Tell when audio part differs.
-
-Arguments that change how data is changed:
--b, --both       Save all tags to both files, i.e. sync in both directions.
--c, --copy       Copy missing files from source to dest.
--d, --dry        Dry run. Only tells what differs. No data will be changed.
--t, --time       If a tag exist in both src and dest and dest and differ. Src is
-                 only copied to dest if src is newer than dest. If combined with
-                 -b the newest files tag is preserved.
--o, --overwrite  If a tag exist in both src and dest and differ. src value is 
-                 copied to dest. Cannot be combined wit -t.
-
-Algorithm description
----------------------
-SRC	       DEST	     Effect
-file exist     file missing  Default nothing. If -c file is copied to DEST.
-file missing   file exist    Default nothing.
-file exist     file exist    Depending on content. See next table.
-
-If the file exist in both sides. The following is done:
-
-Metadata checked  Status	 Effect
-Audio part	  Differs	 Default nothing. If -c file is copied to DEST.
-                                 If -c and -t file is copied to DEST if SRC is
-                                 newer. If -b, -t, and -c, newest overwrites 
-                                 oldest. Tags are ignored.
-Tag	          Only in SRC	 Tag copied to DEST.
-Tag	          Only in DEST	 Default nothing. If -b tag is copied to SRC.
-Tag	          Differ. SRC    Default nothing. If -t or -o tag is copied to
-                  newer than     DEST.
-                  DEST		 Default nothing. If -t and -b tag is copied to
-Tag	          Differ. DEST   SRC. If -o tag is copied to DEST.
-                  newer than SRC	 
-
-Examples
---------
-
-SRC newer than DEST
-
-SRC file is changed 2010-12-01 and has the following tags:
-TITLE=foo
-ARTIST=gazonk
-ALBUM=My album
-
-DEST file is changed 2010-11-31 and has the following tags:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-
-The audio part is equal between the two files. 
-
-No extra arguments provided. The SRC file will not be changed and the DEST file
-will have the following metadata:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-Argument flag -b provided. DEST is the same as above. SRC will also be changed:
-TITLE=foo
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-Argument flag -t provided. SRC file will not be changed and DEST file will contain:
-TITLE=foo
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-SRC older than DEST
-
-SRC file is changed 2010-10-01 and has the following tags:
-TITLE=foo
-ARTIST=gazonk
-ALBUM=My album
-
-DEST file is changed 2010-11-31 and has the following tags:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-
-The audio part is equal between the two files.
-
-No extra arguments provided. SRC file will not be changed and DEST file will
-contain:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-Argument flag -b provided. DEST is the same as above. SRC will also be changed:
-TITLE=foo
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-Argument flag -t provided. SRC file will not be changed and DEST file will 
-contain:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-Argument flags -b and -t provided. DEST is the same as above. SRC will also be
-changed:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-Argument flag -o provided. DEST file will contain:
-TITLE=foo
-ARTIST=gazonk
-GENRE=pop
-ALBUM=My album
-
-
-TODO
-----
-What should happen when a tag exists several times. SRC has the following tags:
-TITLE=foo
-ARTIST=gazonk
-ALBUM=My album
-GENRE=english
-
-DEST has the following tags:
-TITLE=bar
-ARTIST=gazonk
-GENRE=pop
-GENRE=swedish
-
-At the moment the same as when there is only one tag exist.
-
 
 
 flac-diff

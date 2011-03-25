@@ -1,0 +1,125 @@
+This file gives a detailed description of flac-syncs algorithm.
+
+Algorithm description
+---------------------
+SRC	       DEST	     Effect
+file exist     file missing  Default nothing. If -c file is copied to DEST.
+file missing   file exist    Default nothing.
+file exist     file exist    Depending on content. See next table.
+
+If the file exist in both sides. The following is done:
+
+Metadata checked  Status	 Effect
+Audio part	  Differs	 Default nothing. If -c file is copied to DEST.
+                                 If -c and -t file is copied to DEST if SRC is
+                                 newer. If -b, -t, and -c, newest overwrites 
+                                 oldest. Tags are ignored.
+Tag	          Only in SRC	 Tag copied to DEST.
+Tag	          Only in DEST	 Default nothing. If -b tag is copied to SRC.
+Tag	          Differ. SRC    Default nothing. If -t or -o tag is copied to
+                  newer than     DEST.
+                  DEST		 Default nothing. If -t and -b tag is copied to
+Tag	          Differ. DEST   SRC. If -o tag is copied to DEST.
+                  newer than SRC	 
+
+Examples
+--------
+
+SRC newer than DEST
+
+SRC file is changed 2010-12-01 and has the following tags:
+TITLE=foo
+ARTIST=gazonk
+ALBUM=My album
+
+DEST file is changed 2010-11-31 and has the following tags:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+
+The audio part is equal between the two files. 
+
+No extra arguments provided. The SRC file will not be changed and the DEST file
+will have the following metadata:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+Argument flag -b provided. DEST is the same as above. SRC will also be changed:
+TITLE=foo
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+Argument flag -t provided. SRC file will not be changed and DEST file will contain:
+TITLE=foo
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+SRC older than DEST
+
+SRC file is changed 2010-10-01 and has the following tags:
+TITLE=foo
+ARTIST=gazonk
+ALBUM=My album
+
+DEST file is changed 2010-11-31 and has the following tags:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+
+The audio part is equal between the two files.
+
+No extra arguments provided. SRC file will not be changed and DEST file will
+contain:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+Argument flag -b provided. DEST is the same as above. SRC will also be changed:
+TITLE=foo
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+Argument flag -t provided. SRC file will not be changed and DEST file will 
+contain:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+Argument flags -b and -t provided. DEST is the same as above. SRC will also be
+changed:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+Argument flag -o provided. DEST file will contain:
+TITLE=foo
+ARTIST=gazonk
+GENRE=pop
+ALBUM=My album
+
+
+TODO
+----
+What should happen when a tag exists several times. SRC has the following tags:
+TITLE=foo
+ARTIST=gazonk
+ALBUM=My album
+GENRE=english
+
+DEST has the following tags:
+TITLE=bar
+ARTIST=gazonk
+GENRE=pop
+GENRE=swedish
+
+At the moment the same as when there is only one tag exist.
+
+

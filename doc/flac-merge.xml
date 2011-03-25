@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY dhfirstname "Magnus">
+  <!ENTITY dhsurname   "Runesson">
+  <!ENTITY dhusername  "&dhfirstname; &dhsurname;">
+  <!ENTITY dhemail     "magru@linuxalert.org">
+  <!ENTITY dhsection   "1">
+  <!ENTITY dhtitle     "flac-merge User Manual">
+  <!ENTITY dhucpackage "flac-merge">
+  <!ENTITY dhpackage   "flac-merge">
+]>
+
+<refentry>
+  <refentryinfo>
+    <title>&dhtitle;</title>
+    <productname>&dhpackage;</productname>
+    <authorgroup>
+      <author>
+       <firstname>&dhfirstname;</firstname>
+        <surname>&dhsurname;</surname>
+        <contrib>Wrote this manpage.</contrib>
+        <address>
+          <email>&dhemail;</email>
+        </address>
+      </author>
+    </authorgroup>
+    <copyright>
+      <year>2011</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    <legalnotice>
+      <para>This manual page was written for the Ubuntu system
+        (and may be used by others).</para>
+      <para>Permission is granted to copy, distribute and/or modify this
+        document under the terms of the GNU General Public License,
+        Version 2 or (at your option) any later version published by
+        the Free Software Foundation.</para>
+      <para>On Ubuntu systems, the complete text of the GNU General Public
+        License can be found in
+        <filename>/usr/share/common-licenses/GPL</filename>.</para>
+    </legalnotice>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>&dhucpackage;</refentrytitle>
+    <manvolnum>&dhsection;</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+    <refpurpose>Merge tags from two flac files.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+      <arg choice="opt">
+        <option>-v</option>
+      </arg>
+      <arg choice="opt">
+        <option>-a</option>
+      </arg>
+      <arg choice="opt">
+        <option>-b</option>
+      </arg>
+      <arg choice="plain">
+          <replaceable>FILE1</replaceable>
+      </arg>
+      <arg choice="plain">
+          <replaceable>FILE2</replaceable>
+      </arg>
+      <arg choice="opt">
+          <replaceable>DESTFILE</replaceable>
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="description">
+    <title>DESCRIPTION</title>
+    <para>
+    The command <command>flac-merge</command> take two flac files and merge
+    the tags. It requires that the md5 signature of the audio part in the 
+    files are equal. Values of the second file will override the first file. 
+    If destination file not provided, result is written to the second file.
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>OPTIONS</title>
+    <para>The program follows the usual GNU command line syntax,
+      with long options starting with two dashes (`-').  A summary of
+      options is included below.
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>-h</option>
+        </term>
+        <term>
+          <option>--help</option>
+        </term>
+        <listitem>
+          <para>Show summary of options.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-v</option>
+        </term>
+        <term>
+          <option>--verbose</option>
+        </term>
+        <listitem>
+          <para>Increase output verbosity.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-b</option>
+        </term>
+        <term>
+          <option>--both</option>
+        </term>
+        <listitem>
+          <para>Save all tags to all files. If destination file given, all three files will get the same tags.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <title>Positional Arguments</title>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>FILE1</option>
+        </term>
+        <listitem>
+          <para>Flac file used as base line.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>FILE2</option>
+        </term>
+        <listitem>
+          <para>Second file in the merge. Also destination file if 
+          <option>DESTFILE</option> not given.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>DESTFILE</option>
+        </term>
+        <listitem>
+          <para>Destination file</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="see_also">
+    <title>SEE ALSO</title> 
+        <para><citerefentry>
+        <refentrytitle>flac-diff</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry>, <citerefentry>
+        <refentrytitle>flac-sync</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry></para>
+  </refsect1>
+</refentry>
+

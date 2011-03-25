@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. -->
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY dhfirstname "Magnus">
+  <!ENTITY dhsurname   "Runesson">
+  <!ENTITY dhusername  "&dhfirstname; &dhsurname;">
+  <!ENTITY dhemail     "magru@linuxalert.org">
+  <!ENTITY dhsection   "1">
+  <!ENTITY dhtitle     "flac-sync User Manual">
+  <!ENTITY dhucpackage "flac-sync">
+  <!ENTITY dhpackage   "flac-sync">
+]>
+<refentry>
+  <refentryinfo>
+    <title>&dhtitle;</title>
+    <productname>&dhpackage;</productname>
+    <authorgroup>
+      <author>
+        <firstname>&dhfirstname;</firstname>
+        <surname>&dhsurname;</surname>
+        <contrib>Wrote this manpage.</contrib>
+        <address>
+          <email>&dhemail;</email>
+        </address>
+      </author>
+    </authorgroup>
+    <copyright>
+      <year>2011</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    <legalnotice>
+      <para>This manual page was written for the Ubuntu system
+        (and may be used by others).</para>
+      <para>Permission is granted to copy, distribute and/or modify this
+        document under the terms of the GNU General Public License,
+        Version 2 or (at your option) any later version published by
+        the Free Software Foundation.</para>
+      <para>On Ubuntu systems, the complete text of the GNU General Public
+        License can be found in
+        <filename>/usr/share/common-licenses/GPL</filename>.</para>
+    </legalnotice>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>&dhucpackage;</refentrytitle>
+    <manvolnum>&dhsection;</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+    <refpurpose>Sync tree of flac files using metadata information such as comments.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+      <arg choice="opt">
+        <option>-v</option>
+      </arg>
+      <arg choice="opt">
+        <option>-a</option>
+      </arg>
+      <arg choice="opt">
+        <option>-b</option>
+      </arg>
+      <arg choice="opt">
+        <option>-c</option>
+      </arg>
+      <arg choice="opt">
+        <option>-d</option>
+      </arg>
+      <arg choice="opt">
+        <option>-i</option>
+      </arg>
+      <group choice="opt">
+        <arg choice="plain">
+          <option>-t</option>
+        </arg>
+        <arg choice="plain">
+        <option>-o</option>
+        </arg>
+      </group>
+      <arg choice="plain">
+          <replaceable>SRCDIR</replaceable>
+      </arg>
+      <arg choice="plain">
+          <replaceable>DESTDIR</replaceable>
+      </arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+        <arg choice="plain">
+          <group choice="req">
+            <arg choice="plain">
+              <option>-h</option>
+            </arg>
+            <arg choice="plain">
+              <option>--help</option>
+            </arg>
+          </group>
+        </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="description">
+    <title>DESCRIPTION</title> <para>The command
+    <command>flac-sync</command> is like <command>rsync</command> but
+    specialized for flac files. <command>flac-sync</command> can
+    synchronize added tags from one tree of flacs to another. It
+    verifies that the audio is equal using length and md5-sum of the
+    audio-part of the track. There are a wide range of options when
+    and how to make synchronization or
+    not. <command>flac-sync</command> has the possibility to do
+    bidirectional synchronization.
+    </para>
+
+  </refsect1>
+  <refsect1 id="options">
+    <title>OPTIONS</title>
+    <para>The program follows the usual GNU command line syntax,
+      with long options starting with two dashes (`-&apos;).  A summary of
+      options is included below.</para>
+
+    <para>The following options does not change the files:</para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>-h</option>
+        </term>
+        <term>
+          <option>--help</option>
+        </term>
+        <listitem>
+          <para>Show summary of options.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-v</option>
+        </term>
+        <term>
+          <option>--verbose</option>
+        </term>
+        <listitem>
+          <para>Increase output verbosity.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-a</option>
+        </term>
+        <term>
+          <option>--audio</option>
+        </term>
+        <listitem>
+          <para>Tell when audio parts differ.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-d</option>
+        </term>
+        <term>
+          <option>--dry</option>
+        </term>
+        <listitem>
+          <para>Dry run, only tell what would have been done.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>The following options affects how data is changed:</para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>-b</option>
+        </term>
+        <term>
+          <option>--both</option>
+        </term>
+        <listitem>
+          <para>Synchronize in both directions, bidirectional sync.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-c</option>
+        </term>
+        <term>
+          <option>--copy</option>
+        </term>
+        <listitem>
+          <para>Copy files from source if missing in destination or audiopart differs. If combined with <option>-t</option> is it only copied if source is newer then destination. If combined with <option>-b</option> and <option>-t</option> newest replace oldest file.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-t</option>
+        </term>
+        <term>
+          <option>--time</option>
+        </term>
+        <listitem>
+          <para>If a tag exist in both src and dest and differ, src is
+                 only copied to dest if src is newer than dest. If
+                 combined with <option>-b</option> the newest files
+                 tag is preserved.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>-o</option>
+        </term>
+        <term>
+          <option>--overwrite</option>
+        </term>
+        <listitem>
+          <para>If a tag exist in both src and dest and differ. src
+                 value is copied to dest. Cannot be combined with
+                 <option>-t</option>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="bugs">
+    <title>BUGS</title> <para>When doing bidirectional syncronization
+    (<option>-b</option>) files only existing in destination tree are
+    ignored.</para>
+  </refsect1>
+  <refsect1 id="see_also">
+    <title>SEE ALSO</title> 
+        <para><citerefentry>
+        <refentrytitle>flac-diff</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry>, <citerefentry>
+        <refentrytitle>flac-merge</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry></para> <para>See also
+        the algorithm description in the documentation directory for
+        details how flac-sync works.</para>
+  </refsect1>
+</refentry>
