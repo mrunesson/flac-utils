@@ -1,3 +1,10 @@
+flac-utils (0.2.3) maverick; urgency=low
+
+  * Add dependency to docbook-xsl
+  * Fix path in makefile for doc.
+
+ -- Magnus Runesson <magru@linuxalert.org>  Sat, 26 Mar 2011 11:15:44 +0100
+
 flac-utils (0.2.1) maverick; urgency=low
 
   * Package fix, added build dependency.
