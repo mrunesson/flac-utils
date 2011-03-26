@@ -2,7 +2,7 @@ Source: flac-utils
 Section: utils
 Priority: optional
 Maintainer: Magnus Runesson <magru@linuxalert.org>
-Build-Depends: debhelper (>= 7.0.50~)
+Build-Depends: debhelper (>= 7.0.50~), xsltproc
 Standards-Version: 3.9.1
 Homepage: http://www.linuxalert.org/project/flac-utils/
 #Vcs-Git: git://git.debian.org/collab-maint/flac-utils.git
