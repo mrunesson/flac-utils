@@ -139,7 +139,8 @@
           <option>--verbose</option>
         </term>
         <listitem>
-          <para>Increase output verbosity.</para>
+          <para>Increase output verbosity. Used several times gives increased
+          verbosity.</para>
         </listitem>
       </varlistentry>
       <varlistentry>
