@@ -192,6 +192,17 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <option>--copy-only-flac</option>
+        </term>
+        <listitem>
+          <para>
+              If a file only exists in SRC and is not a FLAC it will not be copied.
+              This has only effect together with <option>--copy</option>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <option>-t</option>
         </term>
         <term>
@@ -218,11 +229,6 @@
         </listitem>
       </varlistentry>
     </variablelist>
-  </refsect1>
-  <refsect1 id="bugs">
-    <title>BUGS</title> <para>When doing bidirectional syncronization
-    (<option>-b</option>) files only existing in destination tree are
-    ignored.</para>
   </refsect1>
   <refsect1 id="see_also">
     <title>SEE ALSO</title> 
