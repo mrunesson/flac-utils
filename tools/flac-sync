@@ -8,6 +8,34 @@ import os
 import argparse
 import shutil
 
+def copy_files_from_dest_to_src(args):
+    for root, dirs, files in os.walk(args.DESTDIR):
+        if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
+            continue
+    	srcroot=args.SRCDIR+root[len(args.DESTDIR):]
+	for name in files:
+	    dstFile=os.path.join(root, name)
+	    srcFile=os.path.join(srcroot, name)
+            if args.verbosity>=3:
+	        print("Working with dst: " + dstFile + "    src: " + srcFile)
+	    if not os.path.isfile(dstFile):
+	        if args.verbosity>=1:
+		   print("File " + dstFile + " missing.")
+		if args.copy:
+                    if args.copy_only_flac:
+                        try:
+                            FLAC(srcFile)
+                        except:
+                            continue
+		    if not args.dry:
+                        if not os.access(os.path.dirname(srcFile), os.W_OK):
+                            os.makedirs(os.path.dirname(srcFile))
+                        shutil.copyfile(dstFile, srcFile)
+		    else:
+		        print("cp " + dstFile + " " + srcFile)
+                continue
+
+
 def main(argv):
     parser = argparse.ArgumentParser(
         description='Sync file tree of flacs comments for files with the same audio-part.',
@@ -153,7 +181,9 @@ def main(argv):
                 dstFlac.save()
                 if args.both:
                     srcFlac.save()
-            
+
+    if args.both and args.copy:
+        copy_files_from_dest_to_src(args)
 
 if __name__ == "__main__":
     main(sys.argv)
