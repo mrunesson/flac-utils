@@ -192,6 +192,17 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <option>--copy-only-flac</option>
+        </term>
+        <listitem>
+          <para>
+              If a file only exists in SRC and is not a FLAC it will not be copied.
+              This has only effect together with <option>--copy</option>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <option>-t</option>
         </term>
         <term>

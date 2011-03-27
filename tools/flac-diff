@@ -31,8 +31,17 @@ def main(argv):
         print("ERROR: No such file: %s"%args.NEWFILE)
         sys.exit(3)
 
-    oldfile=FLAC(args.OLDFILE)
-    newfile=FLAC(args.NEWFILE)
+    try:
+        oldfile=FLAC(args.OLDFILE)
+    except:
+        print("ERROR: Not a flac: %s"%args.OLDFILE)
+        sys.exit(4)
+
+    try:
+        newfile=FLAC(args.NEWFILE)
+    except:
+        print("ERROR: Not a flac: %s"%args.NEWFILE)
+        sys.exit(5)
 
     comp=flac_compare.FlacCompare(oldfile,newfile)
 
