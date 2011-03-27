@@ -230,11 +230,6 @@
       </varlistentry>
     </variablelist>
   </refsect1>
-  <refsect1 id="bugs">
-    <title>BUGS</title> <para>When doing bidirectional syncronization
-    (<option>-b</option>) files only existing in destination tree are
-    ignored.</para>
-  </refsect1>
   <refsect1 id="see_also">
     <title>SEE ALSO</title> 
         <para><citerefentry>
