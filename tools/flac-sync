@@ -17,7 +17,8 @@ def main(argv):
         """)
     parser.add_argument('SRCDIR', help='Flac file used as base line.')
     parser.add_argument('DESTDIR', help='Second flac file.')
-    parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output.')
+    parser.add_argument('-v', '--verbose',  action='append_const', const=1, default=[],
+                        help='Verbose output. Several times gives mor verbosity.')
     parser.add_argument('-a', '--audio', action='store_true', help='Tell when audio part differs.')
     parser.add_argument('-b', '--both', action='store_true', help='Save all tags to both files.')
     parser.add_argument('-c', '--copy', action='store_true', help='Copy missing files from source to dest.')
@@ -26,6 +27,8 @@ def main(argv):
     parser.add_argument('-o', '--overwrite', action='store_true', help='If a tags differ between src and dest. src value is copied to dest.')
     
     args = parser.parse_args(argv[1:])
+
+    args.verbosity=len(args.verbose)
 
     if args.time and args.overwrite:
         print("Argument error: time and overwrite cammot be combined.")
@@ -38,10 +41,10 @@ def main(argv):
 	for name in files:
 	    srcFile=os.path.join(root, name)
 	    dstFile=os.path.join(destroot, name)
-            if args.verbose:
+            if args.verbosity>=3:
 	        print("Working with src: " + srcFile + "    dst: " + dstFile)
 	    if not os.path.isfile(dstFile):
-	        if args.verbose:
+	        if args.verbosity>=1:
 		   print("File " + dstFile + " missing.")
 		if args.copy:
 		    if not args.dry:
@@ -66,7 +69,7 @@ def main(argv):
             comp=flac_compare.FlacCompare(srcFlac,dstFlac)
  	    if comp.equals():
                 # If files equal do not do anything.
-	        if args.verbose:
+	        if args.verbosity>=2:
 		    print(srcFile + " and " + dstFile + " are equal.")
 	        continue
 
@@ -82,16 +85,16 @@ def main(argv):
                             shutil.copyfile(dstFile, srcFile)
   		        else:
 		            print("cp " + dstFile + " " + srcFile)
-                else:
+                elif args.verbosity>=1:
                     print(srcFile + " and " + dstFile + " are not audio equal, ignored.")
 		continue
-            elif args.verbose:
+            elif args.verbosity>=3:
                 print(srcFile + " and " + dstFile + " audio are equal.")
 
             new=comp.new_tags()
             if new!=[]:
                 new.sort()
-	        if args.verbose:
+	        if args.verbosity>=1:
                     print("Following tags exist only at " + dstFile + ": ", new)
                 if args.both:
                     if args.dry:
@@ -103,7 +106,7 @@ def main(argv):
             removed=comp.removed_tags()
             if removed!=[]:
                 removed.sort()
-	        if args.verbose:
+	        if args.verbosity>=1:
                     print("Following tags exist only at " + srcFile + ": ", removed)
                 if args.dry:
                     print("Following tags copied from " + srcFile + " to " + dstFile + ": ", removed)
@@ -118,7 +121,7 @@ def main(argv):
                     if args.dry:
                         print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
 		    else:
-                        if args.verbose:
+                        if args.verbosity>=1:
                             print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
   		        # Copy changed to dst.
                         for changedTag in changed:
@@ -127,7 +130,7 @@ def main(argv):
                     if args.dry:
                         print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
 		    else:
-                        if args.verbose:
+                        if args.verbosity>=1:
                             print("Following tags overwrites from " + srcFile + " to " + dstFile + ": ", changed)
   		        # Copy changed to dst.
                         for changedTag in changed:
@@ -136,7 +139,7 @@ def main(argv):
                     if args.dry:
                         print("Following tags overwrites from " + dstFile + " to " + srcFile + ": ", changed)
 		    else:
-                        if args.verbose:
+                        if args.verbosity>=1:
                             print("Following tags overwrites from " + dstFile + " to " + srcFile + ": ", changed)
   		        # Copy changed to src.
                         for changedTag in changed:
