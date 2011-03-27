@@ -37,7 +37,7 @@ def main(argv):
     for root, dirs, files in os.walk(args.SRCDIR):
         if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
             continue
-    	destroot=args.DESTDIR+"/"+root[len(args.SRCDIR):]
+    	destroot=os.path.join(args.DESTDIR,root[len(args.SRCDIR):])
 	for name in files:
 	    srcFile=os.path.join(root, name)
 	    dstFile=os.path.join(destroot, name)
