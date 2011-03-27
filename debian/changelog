@@ -1,3 +1,12 @@
+flac-utils (0.3) maverick; urgency=low
+
+  * Copy missing files in both direction when syncing bidirectional.
+  * Possible to control verboisty.
+  * --copy-only-flac option introduced.
+  * added dependency
+
+ -- Magnus Runesson <magru@linuxalert.org>  Sun, 27 Mar 2011 19:44:59 +0200
+
 flac-utils (0.2.3) maverick; urgency=low
 
   * Add dependency to docbook-xsl
