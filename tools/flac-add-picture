@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+from mutagen.flac import FLAC, Picture
+from musicbrainz2.webservice import Query, WebServiceError
+import sys
+import argparse
+import os
+import time
+import httplib
+import tempfile
+import pipes
+
+host="www.amazon.com"
+base_url="http://"+host+"/gp/product/images/"
+image_host="ecx.images-amazon.com"
+search_str="<img src=\"http://"+image_host+"/images/"
+
+
+def get_asin_image_url(asin):
+    conn = httplib.HTTPConnection(host)
+    conn.request("GET",base_url+asin)
+    res = conn.getresponse()
+    data = res.read()
+
+    s=data.find(search_str)+10
+    e=data[s:].find("\"")
+    return data[s:s+e]
+
+def add_image(flacFile, url):
+    tmpfile=tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
+    tmpfile_name=tmpfile.name
+    conn = httplib.HTTPConnection(image_host)
+    conn.request("GET",url)
+    res = conn.getresponse()
+    image = res.read()
+    tmpfile.write(image)
+    tmpfile.close()
+    cmd="metaflac --import-picture-from="+tmpfile_name + " " + pipes.quote(flacFile)
+    print(cmd)
+    os.system(cmd)
+    os.remove(tmpfile_name)
+
+def main(argv):
+    parser = argparse.ArgumentParser(
+        description='Sync file tree of flacs comments for files with the same audio-part.',
+        epilog="""flac-sync take two directories and sync the those directory
+        trees flac files comment. File with different audio part are not
+        handled. If a files only exist in one of the trees the file is ignored.
+        """)
+    parser.add_argument('SRCDIR', help='Flac file used as base line.')
+    args = parser.parse_args(argv[1:])
+
+    last_albumid=u'foo'
+    
+    for root, dirs, files in os.walk(args.SRCDIR):
+        if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
+            continue
+	for name in files:
+	    srcFile=os.path.join(root, name)
+	    try:
+                flac=FLAC(srcFile)
+                if flac.pictures!=[]:
+                    continue
+            except:
+                continue
+            try:
+                mb_albumid=flac['musicbrainz_albumid'][0]
+                if mb_albumid==last_albumid:
+                    add_image(srcFile, last_image_url)
+                    continue
+                last_albumid=mb_albumid
+            except:
+                continue
+            time.sleep(1)
+            q=Query()
+            r=q.getReleaseById(mb_albumid)
+            if r.asin!=None:
+                last_image_url=get_asin_image_url(r.asin)
+                add_image(srcFile, last_image_url)
+                
+                        
+
+if __name__ == "__main__":
+    main(sys.argv)
