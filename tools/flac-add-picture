@@ -52,33 +52,52 @@ def main(argv):
     parser.add_argument('SRCDIR', help='Flac file used as base line.')
     args = parser.parse_args(argv[1:])
 
-    last_albumid=u'foo'
+    last_albumid=u'dummy'
+    last_asin=u'dummy'
     
     for root, dirs, files in os.walk(args.SRCDIR):
         if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
             continue
 	for name in files:
+            asin=None
 	    srcFile=os.path.join(root, name)
 	    try:
                 flac=FLAC(srcFile)
-                if flac.pictures!=[]:
-                    continue
             except:
+                # Not a flac file, skip!
                 continue
-            try:
+
+            if flac.pictures!=[]:
+                # If flac has pictures, skip!
+                continue
+
+
+            if flac.has_key('asin'):
+                asin=flac['asin'][0]
+            elif flac.has_key('musicbrainz_albumid'):
                 mb_albumid=flac['musicbrainz_albumid'][0]
-                if mb_albumid==last_albumid:
-                    add_image(srcFile, last_image_url)
+                if mb_albumid!=last_albumid:
+                    last_albumid=mb_albumid
+                    time.sleep(1) #Must exist, otherwise you will be locked out from MB
+                    q=Query()
+                    r=q.getReleaseById(mb_albumid)
+                    asin=r.asin
+                else:
+                    asin=last_asin
+                if asin!=None:
+                    flac['asin']=[asin,]
+                    flac.save()
+                else:
+                    last_asin=None
                     continue
-                last_albumid=mb_albumid
-            except:
+            else:
+                last_asin=None
+                last_albumid=None
                 continue
-            time.sleep(1)
-            q=Query()
-            r=q.getReleaseById(mb_albumid)
-            if r.asin!=None:
-                last_image_url=get_asin_image_url(r.asin)
-                add_image(srcFile, last_image_url)
+            if asin!=last_asin:
+                last_asin=asin
+                image_url=get_asin_image_url(asin)
+            add_image(srcFile, image_url)
                 
                         
 
