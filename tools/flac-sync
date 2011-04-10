@@ -73,6 +73,9 @@ def main(argv):
         print("Argument error: time and overwrite cammot be combined.")
         sys.exit(3)
 
+    args.SRCDIR=os.path.abspath(args.SRCDIR)
+    args.DESTDIR=os.path.abspath(args.DESTDIR)
+
     for root, dirs, files in os.walk(args.SRCDIR):
         if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
             continue
