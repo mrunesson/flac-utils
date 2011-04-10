@@ -1,4 +1,4 @@
-MAN_PAGES = flac-sync.1 flac-diff.1 flac-merge.1
+MAN_PAGES = flac-sync.1 flac-diff.1 flac-add-picture.1
 
 DB2MAN = /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl
 XP     = xsltproc --nonet --param man.charmap.use.subset "0"
