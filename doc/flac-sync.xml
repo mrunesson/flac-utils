@@ -228,6 +228,17 @@
                  <option>-t</option>.</para>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--ignore-pictures</option>
+        </term>
+        <listitem>
+          <para>
+              Ignore handling pictures in flac files. Picture part of flac files
+              will not be compared and syncronized.
+          </para>
+        </listitem>
+      </varlistentry>
     </variablelist>
   </refsect1>
   <refsect1 id="bugs">

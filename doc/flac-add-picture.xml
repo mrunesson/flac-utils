@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY dhfirstname "Magnus">
+  <!ENTITY dhsurname   "Runesson">
+  <!ENTITY dhusername  "&dhfirstname; &dhsurname;">
+  <!ENTITY dhemail     "magru@linuxalert.org">
+  <!ENTITY dhsection   "1">
+  <!ENTITY dhtitle     "flac-add-picture User Manual">
+  <!ENTITY dhucpackage "flac-add-picture">
+  <!ENTITY dhpackage   "flac-add-picture">
+]>
+
+<refentry>
+  <refentryinfo>
+    <title>&dhtitle;</title>
+    <productname>&dhpackage;</productname>
+    <authorgroup>
+      <author>
+       <firstname>&dhfirstname;</firstname>
+        <surname>&dhsurname;</surname>
+        <contrib>Wrote this manpage.</contrib>
+        <address>
+          <email>&dhemail;</email>
+        </address>
+      </author>
+    </authorgroup>
+    <copyright>
+      <year>2011</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    <legalnotice>
+      <para>This manual page was written for the Ubuntu system
+        (and may be used by others).</para>
+      <para>Permission is granted to copy, distribute and/or modify this
+        document under the terms of the GNU General Public License,
+        Version 2 or (at your option) any later version published by
+        the Free Software Foundation.</para>
+      <para>On Ubuntu systems, the complete text of the GNU General Public
+        License can be found in
+        <filename>/usr/share/common-licenses/GPL</filename>.</para>
+    </legalnotice>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>&dhucpackage;</refentrytitle>
+    <manvolnum>&dhsection;</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+    <refpurpose>Add cover art to flac files.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+      <arg choice="plain">
+          <replaceable>SRCDIR</replaceable>
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="description">
+    <title>DESCRIPTION</title>
+    <para>
+    The command <command>dlac-add-picture</command> takes a directory tree of
+    flac files. It uses Music Brainz to identify Amazon part number(asin) of 
+    the album. The asin is used to try retrieve the album cover art for the album.
+    Cover art and asin are stored in the flac file.
+    If a flac file already has cover art stored, nothing will be done.
+    </para>
+  </refsect1>
+  <refsect1 id="see_also">
+    <title>SEE ALSO</title> 
+        <para><citerefentry>
+        <refentrytitle>flac-diff</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry>, <citerefentry>
+        <refentrytitle>flac-sync</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry></para>
+  </refsect1>
+</refentry>
+
