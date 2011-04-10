@@ -210,10 +210,10 @@ def main(argv):
             if new!=[]:
                 new.sort()
 	        if args.verbosity>=1:
-                    print(len(new.pictures), "picture(s) only exist in dst ", dstFile)
+                    print(len(new), "picture(s) only exist in dst ", dstFile)
                 if args.both:
                     if args.dry:
-                        print(len(new.pictures), "picture(s) copied from dst ",
+                        print(len(new), "picture(s) copied from dst ",
                               dstFile, " to src ", srcFile)
 	  	    else:
 		        comp.merge_pictures_reverse()
@@ -223,9 +223,9 @@ def main(argv):
             if removed!=[]:
                 removed.sort()
 	        if args.verbosity>=1:
-                    print(len(removed.pictures), "picture(s) only exist in src ", srcFile)
+                    print(len(removed), "picture(s) only exist in src ", srcFile)
                 if args.dry:
-                    print(len(removed.pictures), "picture(s) copied from src ",
+                    print(len(removed), "picture(s) copied from src ",
                               srcFile, " to dst ", dstFile)
 		else:
 		    comp.merge_pictures()            
