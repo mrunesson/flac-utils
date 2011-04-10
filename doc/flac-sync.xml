@@ -241,13 +241,6 @@
       </varlistentry>
     </variablelist>
   </refsect1>
-  <refsect1 id="bugs">
-    <title>BUGS</title> 
-        <para>
-        SRCDIR and DESTDIR can not be given in the form ./dirname, use just
-        dirname.
-        </para>
-  </refsect1>
   <refsect1 id="see_also">
     <title>SEE ALSO</title> 
         <para>
