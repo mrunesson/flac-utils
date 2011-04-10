@@ -44,12 +44,8 @@ def add_image(flacFile, url):
 
 def main(argv):
     parser = argparse.ArgumentParser(
-        description='Sync file tree of flacs comments for files with the same audio-part.',
-        epilog="""flac-sync take two directories and sync the those directory
-        trees flac files comment. File with different audio part are not
-        handled. If a files only exist in one of the trees the file is ignored.
-        """)
-    parser.add_argument('SRCDIR', help='Flac file used as base line.')
+        description='Embed pictures into flacs.')
+    parser.add_argument('SRCDIR', help='Directory with flac file to add pictures.')
     args = parser.parse_args(argv[1:])
 
     last_albumid=u'dummy'
