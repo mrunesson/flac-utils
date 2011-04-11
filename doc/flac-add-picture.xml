@@ -61,11 +61,17 @@
   <refsect1 id="description">
     <title>DESCRIPTION</title>
     <para>
-    The command <command>dlac-add-picture</command> takes a directory tree of
-    flac files. It uses Music Brainz to identify Amazon part number(asin) of 
-    the album. The asin is used to try retrieve the album cover art for the album.
-    Cover art and asin are stored in the flac file.
-    If a flac file already has cover art stored, nothing will be done.
+    The command <command>dlac-add-picture</command> takes a directory
+    tree of flac files. It uses Music Brainz to identify Amazon part
+    number(asin) of the album. The asin is used to try retrieve the
+    album cover art for the album.  Cover art and asin are stored in
+    the flac file.  If a flac file already has cover art stored,
+    nothing will be done.
+    </para>
+    <para>
+    It may be worth running the command a few time close to each other. 
+    Servers may not be possible to answer the first time and the command
+    does not repeat its question on failure.
     </para>
   </refsect1>
   <refsect1 id="see_also">
