@@ -241,6 +241,13 @@
       </varlistentry>
     </variablelist>
   </refsect1>
+  <refsect1 id="bugs">
+    <title>BUGS</title> 
+        <para>
+        For information about known bugs see
+        <link>https://github.com/mrunesson/flac-utils/issues</link>. Feel
+        free to report new bugs.  </para>
+  </refsect1>
   <refsect1 id="see_also">
     <title>SEE ALSO</title> 
         <para>
