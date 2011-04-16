@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+from mutagen.flac import FLAC, Picture
+from musicbrainz2.webservice import Query, WebServiceError
+import sys
+import argparse
+import os
+import time
+import httplib
+import tempfile
+import pipes
+
+host="www.amazon.com"
+base_url="http://"+host+"/gp/product/images/"
+image_host="ecx.images-amazon.com"
+search_str="<img src=\"http://"+image_host+"/images/"
+
+
+def get_asin_image_url(asin):
+    conn = httplib.HTTPConnection(host)
+    conn.request("GET",base_url+asin)
+    res = conn.getresponse()
+    data = res.read()
+
+    s=data.find(search_str)+10
+    e=data[s:].find("\"")
+    return data[s:s+e]
+
+def add_image(flacFile, url):
+    tmpfile=tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
+    tmpfile_name=tmpfile.name
+    conn = httplib.HTTPConnection(image_host)
+    conn.request("GET",url)
+    res = conn.getresponse()
+    image = res.read()
+    tmpfile.write(image)
+    tmpfile.close()
+    cmd="metaflac --import-picture-from="+tmpfile_name + " " + pipes.quote(flacFile)
+    print(cmd)
+    os.system(cmd)
+    os.remove(tmpfile_name)
+
+def main(argv):
+    parser = argparse.ArgumentParser(
+        description='Embed pictures into flacs.')
+    parser.add_argument('SRCDIR', help='Directory with flac file to add pictures.')
+    args = parser.parse_args(argv[1:])
+
+    last_albumid=u'dummy'
+    last_asin=u'dummy'
+    
+    for root, dirs, files in os.walk(args.SRCDIR):
+        if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
+            continue
+	for name in files:
+            asin=None
+	    srcFile=os.path.join(root, name)
+	    try:
+                flac=FLAC(srcFile)
+            except:
+                # Not a flac file, skip!
+                continue
+
+            if flac.pictures!=[]:
+                # If flac has pictures, skip!
+                continue
+
+
+            if flac.has_key('asin'):
+                asin=flac['asin'][0]
+            elif flac.has_key('musicbrainz_albumid'):
+                mb_albumid=flac['musicbrainz_albumid'][0]
+                if mb_albumid!=last_albumid:
+                    last_albumid=mb_albumid
+                    time.sleep(1) #Must exist, otherwise you will be locked out from MB
+                    q=Query()
+                    r=q.getReleaseById(mb_albumid)
+                    asin=r.asin
+                else:
+                    asin=last_asin
+                if asin!=None:
+                    flac['asin']=[asin,]
+                    flac.save()
+                else:
+                    last_asin=None
+                    continue
+            else:
+                last_asin=None
+                last_albumid=None
+                continue
+            if asin!=last_asin:
+                last_asin=asin
+                image_url=get_asin_image_url(asin)
+            add_image(srcFile, image_url)
+                
+                        
+
+if __name__ == "__main__":
+    main(sys.argv)

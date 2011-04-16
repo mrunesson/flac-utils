@@ -6,7 +6,7 @@ The utilitiy consist of three tools:
    	        audio-part.
  * flac-diff  - Compare two flac files metadata information and tell the 
                 differences.
- * flac-merge - Merge metadata from two flac-files.
+ * flac-add-picture - Add cover pictures to flac files from Amazon.
 
 See man-pages in doc directory and
 http://www.linuxalert.org/project/flac-utils/ for details.

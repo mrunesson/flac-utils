@@ -228,16 +228,38 @@
                  <option>-t</option>.</para>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--ignore-pictures</option>
+        </term>
+        <listitem>
+          <para>
+              Ignore handling pictures in flac files. Picture part of flac files
+              will not be compared and syncronized.
+          </para>
+        </listitem>
+      </varlistentry>
     </variablelist>
+  </refsect1>
+  <refsect1 id="bugs">
+    <title>BUGS</title> 
+        <para>
+        For information about known bugs see
+        <link>https://github.com/mrunesson/flac-utils/issues</link>. Feel
+        free to report new bugs.  </para>
   </refsect1>
   <refsect1 id="see_also">
     <title>SEE ALSO</title> 
-        <para><citerefentry>
+        <para>
+        <citerefentry>
+        <refentrytitle>flac-add-picture</refentrytitle>
+        <manvolnum>1</manvolnum> </citerefentry>,
+        <citerefentry>
         <refentrytitle>flac-diff</refentrytitle>
-        <manvolnum>1</manvolnum> </citerefentry>, <citerefentry>
-        <refentrytitle>flac-merge</refentrytitle>
-        <manvolnum>1</manvolnum> </citerefentry></para> <para>See also
-        the algorithm description in the documentation directory for
-        details how flac-sync works.</para>
+        <manvolnum>1</manvolnum> </citerefentry> 
+        </para> 
+
+        <para>See also the algorithm description in the documentation
+        directory for details how flac-sync works.</para>
   </refsect1>
 </refentry>

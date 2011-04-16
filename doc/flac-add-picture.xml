@@ -7,9 +7,9 @@
   <!ENTITY dhusername  "&dhfirstname; &dhsurname;">
   <!ENTITY dhemail     "magru@linuxalert.org">
   <!ENTITY dhsection   "1">
-  <!ENTITY dhtitle     "flac-diff User Manual">
-  <!ENTITY dhucpackage "flac-diff">
-  <!ENTITY dhpackage   "flac-diff">
+  <!ENTITY dhtitle     "flac-add-picture User Manual">
+  <!ENTITY dhucpackage "flac-add-picture">
+  <!ENTITY dhpackage   "flac-add-picture">
 ]>
 
 <refentry>
@@ -48,68 +48,31 @@
   </refmeta>
   <refnamediv>
     <refname>&dhpackage;</refname>
-    <refpurpose>Compare and tells the difference between two flac files.</refpurpose>
+    <refpurpose>Add cover art to flac files.</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>&dhpackage;</command>
-      <arg choice="opt">
-        <option>-v</option>
-      </arg>
-      <arg choice="opt">
-        <option>-a</option>
-      </arg>
       <arg choice="plain">
-          <replaceable>FILE1</replaceable>
-      </arg>
-      <arg choice="plain">
-          <replaceable>FILE2</replaceable>
+          <replaceable>SRCDIR</replaceable>
       </arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   <refsect1 id="description">
     <title>DESCRIPTION</title>
     <para>
-    The command <command>flac-diff</command> takes two flac files as argument
-    and tells if they differ. Oposite to normal diff 
-    <command>flac-diff</command> is flac aware. This means it compare the two
-    tracks md5 signatures to tell if the music is the same or not. Thereafter
-    it compares the tags/comments on the tracks and tells which differs. 
-    I.E. you can have to files with the same track but with different tags. 
-    <command>flac-diff</command> will tell you which tags differ between the
-    two files.
+    The command <command>dlac-add-picture</command> takes a directory
+    tree of flac files. It uses Music Brainz to identify Amazon part
+    number(asin) of the album. The asin is used to try retrieve the
+    album cover art for the album.  Cover art and asin are stored in
+    the flac file.  If a flac file already has cover art stored,
+    nothing will be done.
     </para>
-  </refsect1>
-  <refsect1 id="options">
-    <title>OPTIONS</title>
-    <para>The program follows the usual GNU command line syntax,
-      with long options starting with two dashes (`-').  A summary of
-      options is included below.</para>
-
-    <variablelist>
-      <varlistentry>
-        <term>
-          <option>-h</option>
-        </term>
-        <term>
-          <option>--help</option>
-        </term>
-        <listitem>
-          <para>Show summary of options.</para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <option>-v</option>
-        </term>
-        <term>
-          <option>--verbose</option>
-        </term>
-        <listitem>
-          <para>Increase output verbosity.</para>
-        </listitem>
-      </varlistentry>
-    </variablelist>
+    <para>
+    It may be worth running the command a few time close to each other. 
+    Servers may not be possible to answer the first time and the command
+    does not repeat its question on failure.
+    </para>
   </refsect1>
   <refsect1 id="bugs">
     <title>BUGS</title> 
@@ -121,7 +84,7 @@
   <refsect1 id="see_also">
     <title>SEE ALSO</title> 
         <para><citerefentry>
-        <refentrytitle>flac-add-picture</refentrytitle>
+        <refentrytitle>flac-diff</refentrytitle>
         <manvolnum>1</manvolnum> </citerefentry>, <citerefentry>
         <refentrytitle>flac-sync</refentrytitle>
         <manvolnum>1</manvolnum> </citerefentry></para>
