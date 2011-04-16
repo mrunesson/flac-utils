@@ -10,7 +10,7 @@ Homepage: http://www.linuxalert.org/project/flac-utils/
 
 Package: flac-utils
 Architecture: all
-Depends: ${misc:Depends}, python-flaccompare, ${python:Depends}, python-argparse
+Depends: ${misc:Depends}, python-flaccompare, ${python:Depends}, python-argparse, python-mutagen, python-musicbrainz2
 XB-Python-Version: ${python:Versions}
 Description: Toolkit for managing flac-files
  Flac-utils includ tools to compare flac files on metadata. It can also
