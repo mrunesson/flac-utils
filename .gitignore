@@ -1,3 +1,7 @@
 *.pyc
 *~
 *.1
+debian/files
+debian/flac-utils.debhelper.log
+debian/flac-utils.substvars
+debian/flac-utils/
