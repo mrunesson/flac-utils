@@ -1,3 +1,11 @@
+flac-utils (0.4) maverick; urgency=low
+
+  * New tool flac-add-picture
+  * Support for relative paths
+  * Add missing dependencies in packaging
+
+ -- Magnus Runesson <magru@linuxalert.org>  Sun, 17 Apr 2011 18:00:31 +0200
+
 flac-utils (0.3) maverick; urgency=low
 
   * Copy missing files in both direction when syncing bidirectional.
