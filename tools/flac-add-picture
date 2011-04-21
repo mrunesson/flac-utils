@@ -12,21 +12,27 @@ import httplib
 import tempfile
 import pipes
 
-host="www.amazon.com"
-base_url="http://"+host+"/gp/product/images/"
+hostlist=["www.amazon.com", "www.amazon.co.uk", "www.amazon.de",
+          "www.amazon.co.jp", "www.amazon.ca", "www.amazon.cn",
+          "www.amazon.fr", "www.amazon.it"]
+base_path="/gp/product/images/"
 image_host="ecx.images-amazon.com"
 search_str="<img src=\"http://"+image_host+"/images/"
 
 
 def get_asin_image_url(asin):
-    conn = httplib.HTTPConnection(host)
-    conn.request("GET",base_url+asin)
-    res = conn.getresponse()
-    data = res.read()
+    for host in hostlist:
+        conn = httplib.HTTPConnection(host)
+        conn.request("GET","http://"+host+base_path+asin)
+        res = conn.getresponse()
+        data = res.read()
 
-    s=data.find(search_str)+10
-    e=data[s:].find("\"")
-    return data[s:s+e]
+        s=data.find(search_str)+10
+        e=data[s:].find("\"")
+        if data[s].isalpha():
+            return data[s:s+e]
+        
+    return None
 
 def add_image(flacFile, url):
     tmpfile=tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
@@ -38,7 +44,7 @@ def add_image(flacFile, url):
     tmpfile.write(image)
     tmpfile.close()
     cmd="metaflac --import-picture-from="+tmpfile_name + " " + pipes.quote(flacFile)
-    print(cmd)
+    print("Adding picture to: " + pipes.quote(flacFile))
     os.system(cmd)
     os.remove(tmpfile_name)
 
@@ -93,7 +99,8 @@ def main(argv):
             if asin!=last_asin:
                 last_asin=asin
                 image_url=get_asin_image_url(asin)
-            add_image(srcFile, image_url)
+            if image_url!=None:
+                add_image(srcFile, image_url)
                 
                         
 
