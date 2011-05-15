@@ -12,95 +12,121 @@ import httplib
 import tempfile
 import pipes
 
-hostlist=["www.amazon.com", "www.amazon.co.uk", "www.amazon.de",
+HOST_LIST = ["www.amazon.com", "www.amazon.co.uk", "www.amazon.de",
           "www.amazon.co.jp", "www.amazon.ca", "www.amazon.cn",
           "www.amazon.fr", "www.amazon.it"]
-base_path="/gp/product/images/"
-image_host="ecx.images-amazon.com"
-search_str="<img src=\"http://"+image_host+"/images/"
-
+BASE_PATH = "/gp/product/images/"
+IMAGE_HOST = "ecx.images-amazon.com"
+SEARCH_STRING = "<img src=\"http://"+IMAGE_HOST+"/images/"
+verbosity = 0
 
 def get_asin_image_url(asin):
-    for host in hostlist:
+    for host in HOST_LIST:
         conn = httplib.HTTPConnection(host)
-        conn.request("GET","http://"+host+base_path+asin)
+        conn.request("GET", "http://"+host+BASE_PATH+asin)
         res = conn.getresponse()
         data = res.read()
 
-        s=data.find(search_str)+10
-        e=data[s:].find("\"")
+        s = data.find(SEARCH_STRING)+10
+        e = data[s:].find("\"")
         if data[s].isalpha():
+            if verbosity >= 3:
+                print("Found image URL:" + data[s:s+e])
+
             return data[s:s+e]
-        
+
+    if verbosity >= 2:
+        print("Found no image URL for asin " + asin)
     return None
 
-def add_image(flacFile, url):
-    tmpfile=tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
-    tmpfile_name=tmpfile.name
-    conn = httplib.HTTPConnection(image_host)
-    conn.request("GET",url)
+def add_image(flac_file, url):
+    tmpfile = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
+    tmpfile_name = tmpfile.name
+    conn = httplib.HTTPConnection(IMAGE_HOST)
+    conn.request("GET", url)
     res = conn.getresponse()
     image = res.read()
     tmpfile.write(image)
     tmpfile.close()
-    cmd="metaflac --import-picture-from="+tmpfile_name + " " + pipes.quote(flacFile)
-    print("Adding picture to: " + pipes.quote(flacFile))
+    cmd = "metaflac --import-picture-from=" + tmpfile_name + " " + pipes.quote(flac_file)
+    if verbosity >= 1:
+        print("Adding picture to: " + pipes.quote(flac_file))
     os.system(cmd)
     os.remove(tmpfile_name)
 
-def main(argv):
-    parser = argparse.ArgumentParser(
-        description='Embed pictures into flacs.')
-    parser.add_argument('SRCDIR', help='Directory with flac file to add pictures.')
-    args = parser.parse_args(argv[1:])
 
-    last_albumid=u'dummy'
-    last_asin=u'dummy'
+def get_command_line_arguments(argv):
+    parser = argparse.ArgumentParser(
+        description = 'Embed pictures into flacs.')
+    parser.add_argument('-v', '--verbose',  action = 'append_const',
+        const = 1, default = [],
+        help = 'Verbose output. Several times gives mor verbosity.')
+    parser.add_argument('SRCDIR',
+        help = 'Directory with flac file to add pictures.')
+    args = parser.parse_args(argv[1:])
+    return args
+
+    
+def main(argv):
+    args = get_command_line_arguments(argv)
+    verbosity = len(args.verbose)
+
+    last_albumid = u'dummy'
+    last_asin = u'dummy'
     
     for root, dirs, files in os.walk(args.SRCDIR):
         if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
             continue
-	for name in files:
-            asin=None
-	    srcFile=os.path.join(root, name)
-	    try:
-                flac=FLAC(srcFile)
+        for name in files:
+            asin = None
+            src_file = os.path.join(root, name)
+            if verbosity >= 3:
+                print("Working with: " + src_file)
+
+            try:
+                flac = FLAC(src_file)
             except:
                 # Not a flac file, skip!
                 continue
 
-            if flac.pictures!=[]:
+            if flac.pictures != []:
                 # If flac has pictures, skip!
+                if verbosity >= 3:
+                    print(src_file + " has already pictures. Skipping.")
                 continue
 
 
             if flac.has_key('asin'):
-                asin=flac['asin'][0]
+                asin = flac['asin'][0]
             elif flac.has_key('musicbrainz_albumid'):
-                mb_albumid=flac['musicbrainz_albumid'][0]
-                if mb_albumid!=last_albumid:
-                    last_albumid=mb_albumid
+                mb_albumid = flac['musicbrainz_albumid'][0]
+                if mb_albumid != last_albumid:
+                    last_albumid = mb_albumid
                     time.sleep(1) #Must exist, otherwise you will be locked out from MB
-                    q=Query()
-                    r=q.getReleaseById(mb_albumid)
-                    asin=r.asin
+                    q = Query()
+                    r = q.getReleaseById(mb_albumid)
+                    asin = r.asin
                 else:
-                    asin=last_asin
-                if asin!=None:
-                    flac['asin']=[asin,]
+                    asin = last_asin
+                if asin != None:
+                    if verbosity >= 2:
+                        print("Add asin " + asin + " to " + src_file)
+                    flac['asin'] = [asin,]
                     flac.save()
                 else:
-                    last_asin=None
+                    if verbosity >= 2:
+                        print("No asin found for " + src_file)                    
+                    last_asin = None
                     continue
             else:
-                last_asin=None
-                last_albumid=None
+                last_asin = None
+                last_albumid = None
                 continue
-            if asin!=last_asin:
-                last_asin=asin
-                image_url=get_asin_image_url(asin)
-            if image_url!=None:
-                add_image(srcFile, image_url)
+            if asin != last_asin:
+                last_asin = asin
+                image_url = get_asin_image_url(asin)
+            if image_url != None:
+                add_image(src_file, image_url)
                 
                         
 
