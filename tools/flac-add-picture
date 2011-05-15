@@ -117,10 +117,12 @@ def main(argv):
                     flac.save()
                 else:
                     if verbosity >= 2:
-                        print("No asin found for " + src_file)                    
+                        print("No asin found for " + src_file)
                     last_asin = None
                     continue
             else:
+                if verbosity >= 2:
+                    print("No musicbrainz info in " + src_file + ". Skipping.")
                 last_asin = None
                 last_albumid = None
                 continue
