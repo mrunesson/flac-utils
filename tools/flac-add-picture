@@ -92,7 +92,7 @@ def main(argv):
             if flac.pictures != []:
                 # If flac has pictures, skip!
                 if verbosity >= 3:
-                    print(src_file + " has already pictures. Skipping.")
+                    print(src_file + " already has pictures. Skipping.")
                 continue
 
 
