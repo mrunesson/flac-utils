@@ -103,11 +103,15 @@ def main(argv):
             elif flac.has_key('musicbrainz_albumid'):
                 mb_albumid = flac['musicbrainz_albumid'][0]
                 if mb_albumid != last_albumid:
-                    last_albumid = mb_albumid
                     time.sleep(1) #Must exist, otherwise you will be locked out from MB
-                    q = Query()
-                    r = q.getReleaseById(mb_albumid)
-                    asin = r.asin
+                    try:
+                        q = Query()
+                        r = q.getReleaseById(mb_albumid)
+                        last_albumid = mb_albumid
+                        asin = r.asin
+                    except:
+                        print("ERROR: Problem talking to MusicBrainz about " + src_file + ". Skipping.")
+                        continue
                 else:
                     asin = last_asin
                 if asin != None:
