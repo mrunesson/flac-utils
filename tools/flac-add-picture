@@ -98,7 +98,7 @@ def main(argv):
 
             if flac.has_key('asin'):
                 if verbosity >= 2:
-                    print(src_file + " has asin " + asin + " but no picture.")
+                    print(src_file + " has asin " + flac['asin'][0] + " but no picture.")
                 asin = flac['asin'][0]
             elif flac.has_key('musicbrainz_albumid'):
                 mb_albumid = flac['musicbrainz_albumid'][0]
