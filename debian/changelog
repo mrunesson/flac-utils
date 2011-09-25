@@ -1,3 +1,14 @@
+flac-utils (0.5) oneiric; urgency=low
+
+  * Fix handling of failed questions to MB. Skiping file and moves on.
+  * Verbose messageing
+  * Language fix.
+  * Tell when musicbrainz info is missing.
+  * Support using other Amazon domains than .com. This makes it possible
+    to find album cover art for records not published in US.
+
+ -- Magnus Runesson <magru@linuxalert.org>  Sun, 25 Sep 2011 19:12:32 +0200
+
 flac-utils (0.4) maverick; urgency=low
 
   * New tool flac-add-picture
