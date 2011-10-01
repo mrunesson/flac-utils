@@ -84,7 +84,9 @@ def main(argv):
         # Loop over all files in a directory.
 	for name in files:
 	    srcFile=os.path.join(root, name)
+            srcUpdated=False
 	    dstFile=os.path.join(destroot, name)
+            dstUpdated=False
             if args.verbosity>=3:
 	        print("Working with src: " + srcFile + "    dst: " + dstFile)
 	    if not os.path.isfile(dstFile):
@@ -152,6 +154,7 @@ def main(argv):
                         print("Following tags copied from " + dstFile + " to " +
                               srcFile + ": ", new)
 	  	    else:
+                        srcUpdated=True
 		        comp.merge_reverse()
             
             # Have source some tags destination does not have?
@@ -164,6 +167,7 @@ def main(argv):
                     print("Following tags copied from " + srcFile + " to " +
                           dstFile + ": ", removed)
 		else:
+                    dstUpdated=True;
 		    comp.merge()
 
             # Look at common tags and how they may have changed.
@@ -179,6 +183,7 @@ def main(argv):
                             print("Following tags overwrites from " + srcFile + " to " +
                                   dstFile + ": ", changed)
   		        # Copy changed to dst.
+                        dstUpdated=True
                         for changedTag in changed:
                             dstFlac[changedTag]=srcFlac[changedTag]
                 elif args.overwrite:
@@ -190,6 +195,7 @@ def main(argv):
                             print("Following tags overwrites from " + srcFile + " to " +
                                   dstFile + ": ", changed)
   		        # Copy changed to dst.
+                        dstUpdated=True
                         for changedTag in changed:
                             dstFlac[changedTag]=srcFlac[changedTag]
                 elif args.time and args.both and os.path.getmtime(srcFile) < os.path.getmtime(dstFile):
@@ -201,6 +207,7 @@ def main(argv):
                             print("Following tags overwrites from " + dstFile + " to " +
                                   srcFile + ": ", changed)
   		        # Copy changed to src.
+                        srcUpdated=True
                         for changedTag in changed:
                             srcFlac[changedTag]=dstFlac[changedTag]
 
@@ -216,6 +223,7 @@ def main(argv):
                         print(len(new), "picture(s) copied from dst ",
                               dstFile, " to src ", srcFile)
 	  	    else:
+                        srcUpdated=True
 		        comp.merge_pictures_reverse()
             
             # Have source some pictures destination does not have?
@@ -228,12 +236,14 @@ def main(argv):
                     print(len(removed), "picture(s) copied from src ",
                               srcFile, " to dst ", dstFile)
 		else:
+                    dstUpdated=True
 		    comp.merge_pictures()            
 
             # Save our changes.
             if not args.dry:
-                dstFlac.save()
-                if args.both:
+                if dstUpdated:
+                    dstFlac.save()
+                if args.both and srcUpdated:
                     srcFlac.save()
 
     if args.both and args.copy:
