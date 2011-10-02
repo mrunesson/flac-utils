@@ -60,7 +60,7 @@ def get_command_line_arguments(argv):
         description = 'Embed pictures into flacs.')
     parser.add_argument('-v', '--verbose',  action = 'append_const',
         const = 1, default = [],
-        help = 'Verbose output. Several times gives mor verbosity.')
+        help = 'Verbose output. Several times gives more verbosity.')
     parser.add_argument('SRCDIR',
         help = 'Directory with flac file to add pictures.')
     args = parser.parse_args(argv[1:])
