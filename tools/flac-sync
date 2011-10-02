@@ -148,10 +148,10 @@ def main(argv):
             if new!=[]:
                 new.sort()
 	        if args.verbosity>=1:
-                    print("Following tags exist only at " + dstFile + ": ", new)
+                    print("Following tags exist only at dst " + dstFile + ": ", new)
                 if args.both:
                     if args.dry:
-                        print("Following tags copied from " + dstFile + " to " +
+                        print("Following tags copied from dst " + dstFile + " to " +
                               srcFile + ": ", new)
 	  	    else:
                         srcUpdated=True
@@ -162,9 +162,9 @@ def main(argv):
             if removed!=[]:
                 removed.sort()
 	        if args.verbosity>=1:
-                    print("Following tags exist only at " + srcFile + ": ", removed)
+                    print("Following tags exist only at src " + srcFile + ": ", removed)
                 if args.dry:
-                    print("Following tags copied from " + srcFile + " to " +
+                    print("Following tags copied from src " + srcFile + " to dst " +
                           dstFile + ": ", removed)
 		else:
                     dstUpdated=True;
@@ -176,11 +176,11 @@ def main(argv):
                 changed.sort()
    	        if args.time and os.path.getmtime(srcFile) > os.path.getmtime(dstFile):
                     if args.dry:
-                        print("Following tags overwrites from " + srcFile + " to " +
+                        print("Following tags overwrites from src " + srcFile + " to dst " +
                               dstFile + ": ", changed)
 		    else:
                         if args.verbosity>=1:
-                            print("Following tags overwrites from " + srcFile + " to " +
+                            print("Following tags overwrites from src " + srcFile + " to dst " +
                                   dstFile + ": ", changed)
   		        # Copy changed to dst.
                         dstUpdated=True
@@ -188,11 +188,11 @@ def main(argv):
                             dstFlac[changedTag]=srcFlac[changedTag]
                 elif args.overwrite:
                     if args.dry:
-                        print("Following tags overwrites from " + srcFile + " to " +
+                        print("Following tags overwrites from src " + srcFile + " to dst " +
                               dstFile + ": ", changed)
 		    else:
                         if args.verbosity>=1:
-                            print("Following tags overwrites from " + srcFile + " to " +
+                            print("Following tags overwrites from src " + srcFile + " to dst " +
                                   dstFile + ": ", changed)
   		        # Copy changed to dst.
                         dstUpdated=True
@@ -200,11 +200,11 @@ def main(argv):
                             dstFlac[changedTag]=srcFlac[changedTag]
                 elif args.time and args.both and os.path.getmtime(srcFile) < os.path.getmtime(dstFile):
                     if args.dry:
-                        print("Following tags overwrites from " + dstFile + " to " +
+                        print("Following tags overwrites from dst " + dstFile + " to src " +
                               srcFile + ": ", changed)
 		    else:
                         if args.verbosity>=1:
-                            print("Following tags overwrites from " + dstFile + " to " +
+                            print("Following tags overwrites from dst " + dstFile + " to src " +
                                   srcFile + ": ", changed)
   		        # Copy changed to src.
                         srcUpdated=True
