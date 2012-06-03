@@ -230,6 +230,17 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <option>-e</option>
+        </term>
+        <term>
+          <option>--exclude</option>
+        </term>
+        <listitem>
+          <para>Exlude paths listed in file. File should have one path per line.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <option>--ignore-pictures</option>
         </term>
         <listitem>
