@@ -35,6 +35,12 @@ def copy_files_from_dest_to_src(args):
 		        print("cp " + dstFile + " " + srcFile)
                 continue
 
+def in_exlude(fileName, excludeSet):
+    for l in excludeSet:
+        if fileName.count(l)>0:
+            return True
+    return False
+
 
 def main(argv):
     parser = argparse.ArgumentParser(
@@ -63,6 +69,8 @@ def main(argv):
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='If a tags differ between src and dest.' +
                         'src value is copied to dest.')
+    parser.add_argument('-e', '--exclude', type=argparse.FileType('r'),
+                        help='Exclude paths listed in file.')
     parser.add_argument('--ignore-pictures', action='store_true',
                         help='Ignore handling of pictures in flac files.')
     
@@ -70,8 +78,13 @@ def main(argv):
     args.verbosity=len(args.verbose)
 
     if args.time and args.overwrite:
-        print("Argument error: time and overwrite cammot be combined.")
+        print("Argument error: time and overwrite cammot be combined.", file=sys.stderr)
         sys.exit(3)
+
+    if args.exclude:
+        excludeFiles=set([])
+        for line in args.exclude:
+            excludeFiles.add(line.strip())
 
     args.SRCDIR=os.path.abspath(args.SRCDIR)
     args.DESTDIR=os.path.abspath(args.DESTDIR)
@@ -84,8 +97,16 @@ def main(argv):
         # Loop over all files in a directory.
 	for name in files:
 	    srcFile=os.path.join(root, name)
+            if in_exclude(srcFile, excludeFiles):
+                if args.verbosity>=2:
+   	            print("Excludeing source: " + srcFile)
+                continue
             srcUpdated=False
 	    dstFile=os.path.join(destroot, name)
+            if in_exclude(dstFile, excludeFiles):
+                if args.verbosity>=2:
+   	            print("Excludeing destination: " + dstFile)
+                continue
             dstUpdated=False
             if args.verbosity>=3:
 	        print("Working with src: " + srcFile + "    dst: " + dstFile)
@@ -108,12 +129,12 @@ def main(argv):
             try:
                 srcFlac=FLAC(srcFile)
             except:
-                print("ERROR: Cannot handle source file %s, skipping."%srcFile)
+                print("ERROR: Cannot handle source file %s, skipping."%srcFile, file=sys.stderr)
                 continue
             try:
                 dstFlac=FLAC(dstFile)
             except:
-                print("ERROR: Cannot handle destination file %s, skipping."%dstFile)
+                print("ERROR: Cannot handle destination file %s, skipping."%dstFile, file=sys.stderr)
                 continue
 
             # We have to flac files, time to compare them.
