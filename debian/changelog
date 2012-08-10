@@ -1,3 +1,9 @@
+flac-utils (0.6) precise; urgency=low
+
+  * Support for exclude file.
+
+ -- Magnus Runesson <magru@linuxalert.org>  Fre, 10 Aug 2012 19:57:12 +0200
+
 flac-utils (0.5) oneiric; urgency=low
 
   * Fix handling of failed questions to MB. Skiping file and moves on.

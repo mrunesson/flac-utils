@@ -3,14 +3,14 @@ Section: utils
 Priority: optional
 Maintainer: Magnus Runesson <magru@linuxalert.org>
 Build-Depends: debhelper (>= 7.0.50~), xsltproc, docbook-xsl
-Standards-Version: 3.9.1
+Standards-Version: 3.9.3
 Homepage: http://www.linuxalert.org/project/flac-utils/
 Vcs-Git: git://github.com/mrunesson/flac-utils.git
 Vcs-Browser: https://github.com/mrunesson/flac-utils
 
 Package: flac-utils
 Architecture: all
-Depends: ${misc:Depends}, python-flaccompare (>= 0.3.1), ${python:Depends}, python-argparse, python-mutagen, python-musicbrainz2, flac
+Depends: ${misc:Depends}, python-flaccompare (>= 0.3.2), ${python:Depends}, python-argparse, python-mutagen, python-musicbrainz2, flac
 XB-Python-Version: ${python:Versions}
 Description: Toolkit for managing flac-files
  Flac-utils includ tools to compare flac files on metadata. It can also
