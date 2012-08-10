@@ -89,6 +89,8 @@ def main(argv):
     args = parser.parse_args(argv[1:])
     args.verbosity=len(args.verbose)
 
+    args.verbosity=len(args.verbose)
+
     if args.time and args.overwrite:
         print("Argument error: time and overwrite cammot be combined.", file=sys.stderr)
         sys.exit(3)
