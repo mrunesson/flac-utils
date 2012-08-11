@@ -39,20 +39,24 @@ def get_asin_image_url(asin):
         print("Found no image URL for asin " + asin)
     return None
 
-def add_image(flac_file, url):
-    tmpfile = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
-    tmpfile_name = tmpfile.name
-    conn = httplib.HTTPConnection(IMAGE_HOST)
-    conn.request("GET", url)
-    res = conn.getresponse()
-    image = res.read()
-    tmpfile.write(image)
-    tmpfile.close()
+def add_image(flac_file, url, local=False):
+    if not local:
+        tmpfile = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
+        tmpfile_name = tmpfile.name
+        conn = httplib.HTTPConnection(IMAGE_HOST)
+        conn.request("GET", url)
+        res = conn.getresponse()
+        image = res.read()
+        tmpfile.write(image)
+        tmpfile.close()
+    else:
+        tmpfile_name="\"" + url + "\""
     cmd = "metaflac --import-picture-from=" + tmpfile_name + " " + pipes.quote(flac_file)
     if verbosity >= 1:
         print("Adding picture to: " + pipes.quote(flac_file))
     os.system(cmd)
-    os.remove(tmpfile_name)
+    if not local:
+        os.remove(tmpfile_name)
 
 
 def get_command_line_arguments(argv):
@@ -70,23 +74,36 @@ def get_command_line_arguments(argv):
 def main(argv):
     args = get_command_line_arguments(argv)
     verbosity = len(args.verbose)
-
     last_albumid = u'dummy'
     last_asin = u'dummy'
     
     for root, dirs, files in os.walk(args.SRCDIR):
         if len(root)>0 and (root[0]=='.' or root.find("/.")!=-1):
             continue
+
+        local_album = os.path.join(root, "album.jpg")
+        if os.path.isfile(local_album):
+            if verbosity >= 2:
+                print("Directory " + root + " has local album file.")
+        else:
+            local_album = None
+
         for name in files:
             asin = None
             src_file = os.path.join(root, name)
             if verbosity >= 3:
                 print("Working with: " + src_file)
 
+            if src_file[-5:].lower()!=".flac":
+                if verbosity >= 2:
+                    print("Not a flac file, skipping: " + src_file)
+                continue
             try:
                 flac = FLAC(src_file)
             except:
                 # Not a flac file, skip!
+                if verbosity >= 2:
+                    print("Not a flac file but with flac extension, skipping: " + src_file)
                 continue
 
             if flac.pictures != []:
@@ -95,6 +112,9 @@ def main(argv):
                     print(src_file + " already has pictures. Skipping.")
                 continue
 
+            if local_album is not None:
+                add_image(src_file, local_album, True)
+                continue
 
             if flac.has_key('asin'):
                 if verbosity >= 2:
