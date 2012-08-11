@@ -1,3 +1,9 @@
+flac-utils (0.6.2) precise; urgency=low
+
+  * Fix spelling.
+
+ -- Magnus Runesson <magru@linuxalert.org>  Sat, 11 Aug 2012 15:18:10 +0200
+
 flac-utils (0.6.1) precise; urgency=low
 
   * Include changes.
