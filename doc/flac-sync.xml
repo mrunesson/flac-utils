@@ -253,6 +253,13 @@
     </variablelist>
   </refsect1>
   <refsect1 id="bugs">
+    <title>EXAMPLES</title> 
+        <para>
+	  To sync two directories in both directions, exclude some files and only care about flacs:
+          flac-sync -e exclude.txt -vcbt --copy-only-flac /srv/my/first/dir/ /srv/my/second/dir/
+        </para>
+  </refsect1>
+  <refsect1 id="bugs">
     <title>BUGS</title> 
         <para>
         For information about known bugs see
