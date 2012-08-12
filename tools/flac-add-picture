@@ -50,7 +50,7 @@ def add_image(flac_file, url, local=False):
         tmpfile.write(image)
         tmpfile.close()
     else:
-        tmpfile_name="\"" + url + "\""
+        tmpfile_name=pipes.quote(url)
     cmd = "metaflac --import-picture-from=" + tmpfile_name + " " + pipes.quote(flac_file)
     if verbosity >= 1:
         print("Adding picture to: " + pipes.quote(flac_file))
