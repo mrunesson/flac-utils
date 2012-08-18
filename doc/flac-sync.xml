@@ -241,6 +241,19 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <option>-r</option>
+        </term>
+        <term>
+          <option>--rating</option>
+        </term>
+        <listitem>
+          <para>Including ratings. Normaly flac-sync ignore to sync ratings and play count. This include
+                these tags in syncing. If a file is copied, ie not existing at destination, rating tags
+                will be included even if this flag is not given.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <option>--ignore-pictures</option>
         </term>
         <listitem>
