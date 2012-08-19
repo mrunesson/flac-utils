@@ -1,3 +1,9 @@
+flac-utils (0.7.0) precise; urgency=low
+
+  * Ignoring rating and play count tags. This can be overriden with -r.
+
+ -- Magnus Runesson <magru@linuxalert.org>  Sat, 19 Aug 2012 15:21:43 +0200
+
 flac-utils (0.6.2) precise; urgency=low
 
   * Fix spelling.

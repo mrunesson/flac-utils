@@ -10,7 +10,7 @@ Vcs-Browser: https://github.com/mrunesson/flac-utils
 
 Package: flac-utils
 Architecture: all
-Depends: ${misc:Depends}, python-flaccompare (>= 0.3.2), ${python:Depends}, python-argparse, python-mutagen, python-musicbrainz2, flac
+Depends: ${misc:Depends}, python-flaccompare (>= 0.4.0), ${python:Depends}, python-argparse, python-mutagen, python-musicbrainz2, flac
 XB-Python-Version: ${python:Versions}
 Description: Toolkit for managing flac-files
  Flac-utils includ tools to compare flac files on metadata. It can also
